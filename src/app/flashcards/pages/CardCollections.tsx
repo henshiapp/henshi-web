@@ -44,7 +44,7 @@ export function CardCollections() {
           />
         </div>
 
-        {collections?.length && (
+        {!collectionsQuery.isLoading && collections?.length !== 0 && (
           <>
             <div className="grid grid-cols-4 gap-2 mb-5">
               {collections?.map((collection) => (

@@ -13,19 +13,19 @@ import { useDebounce } from "primereact/hooks";
 
 export function AppTopbar() {
   const { pageTitle } = usePageTitle();
-  const { user, signout } = useAuth();
+  const { user, logout } = useAuth();
   const [, setSearchParams] = useSearchParams();
   const [, debouncedValue, setInputValue] = useDebounce("", 400);
 
-  const userProfilePicture = user?.profile.picture;
-  const userFirstNameLetter = user?.profile.name?.[0];
+  const userProfilePicture = user?.picture;
+  const userFirstNameLetter = user?.given_name?.[0];
 
   const menu = useRef<Menu>(null);
   const items: MenuItem[] = [
     {
       template: () => (
         <Button
-          onClick={signout}
+          onClick={logout}
           className="w-full"
           label="Logout"
           icon="ph ph-arrow-square-left"
@@ -94,7 +94,7 @@ export function AppTopbar() {
               shape="circle"
             ></Avatar>
           )}
-          <span className="ms-3 font-semibold">{user?.profile.name}</span>
+          <span className="ms-3 font-semibold">{user?.given_name}</span>
           <i className="ph ph-caret-down ms-2"></i>
         </div>
       </div>

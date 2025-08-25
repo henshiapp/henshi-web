@@ -1,11 +1,9 @@
-import { useApi } from "../../../auth/hooks/useApi"
+import { Api } from "../../../auth/hooks/useApi"
 import { useMutation } from "@tanstack/react-query";
 
 export const useDeleteCardCollection = () => {
-    const api = useApi()
-
     return useMutation({
         mutationKey: ['deleteCardCollection'],
-        mutationFn: api.deleteCardCollection
+        mutationFn: (id) => Api.delete<null>(`/v1/card-collections/${id}`)
     })
 }

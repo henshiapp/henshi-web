@@ -1,74 +1,32 @@
-import { createZitadelAuth, ZitadelConfig } from "@zitadel/react";
-import { User } from "oidc-client-ts";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { AuthContext } from "../contexts/AuthContext";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const config: ZitadelConfig = {
-    authority: import.meta.env.VITE_AUTH_AUTHORITY,
-    client_id: import.meta.env.VITE_AUTH_CLIENT_ID,
-    redirect_uri: "http://localhost/app/dashboard",
-  };
+  const auth0 = useAuth0()
 
-  const zitadel = createZitadelAuth(config);
-
-  function login() {
-    zitadel.authorize();
+  const login = () => {
+    auth0.loginWithRedirect();
   }
 
-  function signout() {
-    zitadel.signout();
+  const register = () => {
+    auth0.loginWithRedirect({ authorizationParams: { screen_hint: "signup" } })
   }
 
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
-
-  const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    zitadel.userManager.getUser().then((user) => {
-      if (user) {
-        setIsAuthenticated(true);
-      } else {
-        setIsAuthenticated(false);
-      }
-    });
-  }, [zitadel]);
-
-  useEffect(() => {
-    if (isAuthenticated === null) {
-      zitadel.userManager
-        .signinRedirectCallback()
-        .then((user: User) => {
-          if (user) {
-            setIsAuthenticated(true);
-            setUser(user);
-          } else {
-            setIsAuthenticated(false);
-          }
-        })
-        .catch(() => {
-          setIsAuthenticated(false);
-        });
-    }
-    if (isAuthenticated === true && user === null) {
-      zitadel.userManager
-        .getUser()
-        .then((user) => {
-          if (user) {
-            setIsAuthenticated(true);
-            setUser(user);
-          } else {
-            setIsAuthenticated(false);
-          }
-        })
-        .catch(() => {
-          setIsAuthenticated(false);
-        });
-    }
-  }, [isAuthenticated, zitadel.userManager, setIsAuthenticated, user]);
+  const logout = () => {
+    auth0.logout()
+  }
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, signout }}>
+    <AuthContext.Provider value={{
+      isLoading: auth0.isLoading,
+      isAuthenticated: auth0.isAuthenticated,
+      user: auth0.user,
+      login,
+      register,
+      logout,
+      getAccessToken: auth0.getAccessTokenSilently
+    }}>
       {children}
     </AuthContext.Provider>
   );

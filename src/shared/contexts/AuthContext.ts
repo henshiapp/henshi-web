@@ -1,4 +1,12 @@
-import { User } from "oidc-client-ts";
 import { createContext } from "react";
+import { User } from "@auth0/auth0-react";
 
-export const AuthContext = createContext<{ isAuthenticated: boolean | null; user: User | null; login: VoidFunction; signout: VoidFunction; } | null>(null);
+export const AuthContext = createContext<{
+    isLoading: boolean | null;
+    isAuthenticated: boolean | null;
+    user?: User;
+    getAccessToken: (options?: any) => Promise<string>;
+    login: VoidFunction;
+    register: VoidFunction;
+    logout: VoidFunction;
+} | null>(null);

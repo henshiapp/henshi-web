@@ -1,11 +1,20 @@
-import { useApi } from "../../../auth/hooks/useApi"
+import { Api } from "../../../auth/hooks/useApi"
 import { useMutation } from "@tanstack/react-query";
+import { RecallResult } from "../pages/Recall";
 
 export const useFinishRecall = () => {
-    const api = useApi()
-
     return useMutation({
         mutationKey: ['finishRecall'],
-        mutationFn: api.finishRecall
+        mutationFn: ({
+            collectionId,
+            ...body
+        }: {
+            collectionId: string;
+            answers: RecallResult[];
+        }) =>
+            Api.post<any, null>(
+                `/v1/card-collections/${collectionId}/flashcards/recall`,
+                body
+            ),
     })
 }

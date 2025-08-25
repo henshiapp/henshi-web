@@ -9,7 +9,7 @@ export const PageTitleProvider = ({
   const [pageTitle, setPageTitle] = useState("");
 
   useEffect(() => {
-    document.title = pageTitle ? "Henshi - " + pageTitle : "Henshi";
+    document.title = pageTitle ? pageTitle + " | Henshi" : "Henshi";
   }, [pageTitle]);
 
   return (

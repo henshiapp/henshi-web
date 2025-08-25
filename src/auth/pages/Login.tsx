@@ -3,19 +3,28 @@ import { Button } from "primereact/button";
 import { useAuth } from "../../shared/hooks/useAuth";
 
 const Login = () => {
-  const { isAuthenticated, login } = useAuth();
+  const { isLoading, isAuthenticated, login, register } = useAuth();
 
   return (
     <div>
-      {isAuthenticated === null && <div>Loading...</div>}
+      { isLoading && <div>Loading...</div>}
       {isAuthenticated === false && (
-        <div>
-          <Button
-            onClick={() => login()}
-          >
-            Login
-          </Button>
-        </div>
+        <>
+          <div>
+            <Button
+              onClick={() => login()}
+            >
+              Login
+            </Button>
+          </div>
+          <div>
+            <Button
+              onClick={() => register()}
+            >
+              Register
+            </Button>
+          </div>
+        </>
       )}
       {isAuthenticated && <Navigate to="/app/dashboard" />}
     </div>

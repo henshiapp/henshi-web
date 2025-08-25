@@ -14,6 +14,8 @@ const Dashboard = () => {
     setBreadcrumb([])
   }, [])
 
+  console.log(isAuthenticated, user)
+
   if (isAuthenticated === true && user) {
     return (
       <div>

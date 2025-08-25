@@ -4,7 +4,7 @@ import { Menu } from "primereact/menu";
 import { MenuItem } from "primereact/menuitem";
 import { useRef, useState, SyntheticEvent } from "react";
 import { NavLink } from "react-router-dom";
-import { ListCardCollectionsResponse } from "../../../auth/hooks/useApi";
+import { ListCardCollectionsResponse } from "../hooks/useCardCollections";
 import { ROUTES } from "../../../shared/consts/routes";
 import { useToast } from "../../../shared/hooks/useToast";
 import { useDeleteCardCollection } from "../hooks/useDeleteCardCollection";

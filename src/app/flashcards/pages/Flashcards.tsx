@@ -10,7 +10,7 @@ import { useDeleteFlashcard } from "../hooks/useDeleteFlashcard";
 import { confirmDialog, ConfirmDialog } from "primereact/confirmdialog";
 import { useToast } from "../../../shared/hooks/useToast";
 import { ScrollPanel } from "primereact/scrollpanel";
-import { Flashcard } from "../types/Flashcard";
+import { Flashcard, getGradeLabel } from "../types/Flashcard";
 import { usePageParam } from "../../../shared/hooks/usePageParam";
 import { usePageSizeParam } from "../../../shared/hooks/usePageSizeParam";
 import { useSearchParam } from "../../../shared/hooks/useSearchParam";
@@ -75,21 +75,6 @@ export function Flashcards() {
     });
   }
 
-  const getGrade = (grade: Flashcard["grade"]) => {
-    switch (grade) {
-      case "VERY_EASY":
-        return "Very easy";
-      case "EASY":
-        return "Easy";
-      case "MEDIUM":
-        return "Medium";
-      case "HARD":
-        return "Hard";
-      case "VERY_HARD":
-        return "Very hard";
-    }
-  };
-
   return (
     <>
       <div className="flex justify-end items-center mb-5">
@@ -118,7 +103,7 @@ export function Flashcards() {
                     <span className="bg-slate-500 py-2 px-4 rounded-lg text-lg font-semibold">
                       {i + 1}
                     </span>
-                    <Tag severity="info" value={getGrade(flashcard.grade)} />
+                    <Tag severity="info" value={getGradeLabel(flashcard.grade)} />
                   </div>
                   <div className="flex gap-2">
                     <Button

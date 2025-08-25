@@ -6,7 +6,7 @@ import { InputTextarea } from "primereact/inputtextarea";
 import { OverlayPanel } from "primereact/overlaypanel";
 import { Dispatch, memo, SetStateAction, useRef, useState } from "react";
 import * as Yup from "yup";
-import { ListCardCollectionsResponse } from "../../../auth/hooks/useApi";
+import { ListCardCollectionsResponse } from "../hooks/useCardCollections";
 import { UseQueryResult } from "@tanstack/react-query";
 import { Dialog } from "primereact/dialog";
 import { useToast } from "../../../shared/hooks/useToast";
@@ -120,7 +120,7 @@ export function CreateCardCollectionForm({
               }
             ></i>
             {createCollectionForm.touched &&
-            createCollectionForm.errors.icon ? (
+              createCollectionForm.errors.icon ? (
               <small className="text-red-400">
                 {createCollectionForm.errors.icon}
               </small>
@@ -135,7 +135,7 @@ export function CreateCardCollectionForm({
               {...createCollectionForm.getFieldProps("title")}
             />
             {createCollectionForm.touched &&
-            createCollectionForm.errors.title ? (
+              createCollectionForm.errors.title ? (
               <small className="text-red-400">
                 {createCollectionForm.errors.title}
               </small>
@@ -152,7 +152,7 @@ export function CreateCardCollectionForm({
             {...createCollectionForm.getFieldProps("description")}
           ></InputTextarea>
           {createCollectionForm.touched &&
-          createCollectionForm.errors.description ? (
+            createCollectionForm.errors.description ? (
             <small className="text-red-400">
               {createCollectionForm.errors.description}
             </small>

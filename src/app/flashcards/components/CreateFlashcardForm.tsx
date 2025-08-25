@@ -3,7 +3,7 @@ import { Button } from "primereact/button";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Dispatch, SetStateAction } from "react";
 import * as Yup from "yup";
-import { ListFlashcardsResponse } from "../../../auth/hooks/useApi";
+import { ListFlashcardsResponse } from "../hooks/useFlashcards";
 import { UseQueryResult } from "@tanstack/react-query";
 import { Dialog } from "primereact/dialog";
 import { useToast } from "../../../shared/hooks/useToast";
@@ -91,7 +91,7 @@ export function CreateFlashcardForm({
                 {...createFlashcardForm.getFieldProps("question")}
               ></InputTextarea>
               {createFlashcardForm.touched &&
-              createFlashcardForm.errors.question ? (
+                createFlashcardForm.errors.question ? (
                 <small className="text-red-400">
                   {createFlashcardForm.errors.question}
                 </small>
@@ -109,7 +109,7 @@ export function CreateFlashcardForm({
               {...createFlashcardForm.getFieldProps("answer")}
             ></InputTextarea>
             {createFlashcardForm.touched &&
-            createFlashcardForm.errors.answer ? (
+              createFlashcardForm.errors.answer ? (
               <small className="text-red-400">
                 {createFlashcardForm.errors.answer}
               </small>

@@ -1,11 +1,9 @@
-import { useApi } from "../../../auth/hooks/useApi"
 import { useMutation } from "@tanstack/react-query";
+import { Api } from "../../../auth/hooks/useApi";
 
 export const useCreateCardCollection = () => {
-    const api = useApi()
-
     return useMutation({
         mutationKey: ['createCardCollection'],
-        mutationFn: api.createCardCollection
+        mutationFn: (body) => Api.post<any, null>("/v1/card-collections", body)
     })
 }
