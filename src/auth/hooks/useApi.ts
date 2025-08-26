@@ -1,5 +1,3 @@
-import { useAuth } from "../../shared/hooks/useAuth";
-
 export class Api {
   static API_BASE = import.meta.env.VITE_API_URL;
 

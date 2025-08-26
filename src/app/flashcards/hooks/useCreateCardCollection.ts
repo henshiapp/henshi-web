@@ -4,6 +4,6 @@ import { Api } from "../../../auth/hooks/useApi";
 export const useCreateCardCollection = () => {
     return useMutation({
         mutationKey: ['createCardCollection'],
-        mutationFn: (body) => Api.post<any, null>("/v1/card-collections", body)
+        mutationFn: (body: any) => Api.post<any, null>("/v1/card-collections", body)
     })
 }

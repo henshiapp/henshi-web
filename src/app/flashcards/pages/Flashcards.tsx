@@ -10,7 +10,7 @@ import { useDeleteFlashcard } from "../hooks/useDeleteFlashcard";
 import { confirmDialog, ConfirmDialog } from "primereact/confirmdialog";
 import { useToast } from "../../../shared/hooks/useToast";
 import { ScrollPanel } from "primereact/scrollpanel";
-import { Flashcard, getGradeLabel } from "../types/Flashcard";
+import { getGradeLabel } from "../types/Flashcard";
 import { usePageParam } from "../../../shared/hooks/usePageParam";
 import { usePageSizeParam } from "../../../shared/hooks/usePageSizeParam";
 import { useSearchParam } from "../../../shared/hooks/useSearchParam";
