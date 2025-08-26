@@ -97,8 +97,6 @@ export function Recall() {
   const score = recallResults.filter((r) => r.correct).length;
   const total = recallResults.length;
 
-  console.log(state, flashcards);
-
   function startSessionTimer() {
     setIsSessionTimerRunning(true);
   }

@@ -44,11 +44,12 @@ export function CardCollections() {
           />
         </div>
 
-        {!collectionsQuery.isLoading && collections?.length !== 0 && (
+        {!collectionsQuery.isLoading && !collectionsQuery.error && collections?.length !== 0 && (
           <>
             <div className="grid grid-cols-4 gap-2 mb-5">
               {collections?.map((collection) => (
                 <CardCollectionCard
+                  key={collection.id}
                   collection={collection}
                   collectionsQuery={collectionsQuery}
                 />
