@@ -10,6 +10,7 @@ RUN npm run build
 
 FROM nginx:1.29-alpine AS runner
 
+ENV ASSET_DIR=/usr/share/nginx/html
 ENV APP_PREFIX=HENSHI_ENV_
 
 COPY ./infra/nginx/nginx.conf /etc/nginx/conf.d/default.conf
