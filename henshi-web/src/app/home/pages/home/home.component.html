@@ -1,0 +1,5 @@
+@if (auth.isAuthenticated$ | async) {
+<p-button label="Dashboard" (click)="router.navigate(['app', 'dashboard'])" />
+} @else {
+<p-button label="Login" (click)="router.navigate(['auth', 'login'])" />
+}

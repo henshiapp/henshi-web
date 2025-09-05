@@ -1,0 +1,4 @@
+<p-paginator (onPageChange)="onPageChange($event)" [first]="first" [rows]="pageSize"
+    [totalRecords]="metadata?.totalElements" [rowsPerPageOptions]="[10, 20, 30]" [style]="{
+        background: 'transparent'
+    }"></p-paginator>

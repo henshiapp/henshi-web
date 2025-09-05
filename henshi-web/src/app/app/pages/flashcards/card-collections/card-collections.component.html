@@ -1,0 +1,48 @@
+<section id="catalogs" class="flex flex-col h-full">
+      <div class="flex justify-end items-center mb-5">
+        <button
+          pButton
+          size="small"
+          icon="ph ph-plus"
+          label="New"
+          (click)="openDialog()"
+        ></button>
+      </div>
+
+      <!-- Collections list -->
+      <ng-container *ngIf="!loading() && !error() && collections()?.length">
+        <div class="grid grid-cols-4 gap-2 mb-5">
+          <app-card-collection-card
+            *ngFor="let c of collections()"
+            [collection]="c"
+            (deleted)="reload()"
+          />
+        </div>
+        <app-pagination [metadata]="metadata()!" />
+      </ng-container>
+
+      <!-- Loading -->
+      <div *ngIf="loading()" class="flex flex-col justify-center items-center h-full">
+        <app-loading-spinner />
+      </div>
+
+      <!-- Error -->
+      <div *ngIf="error()" class="flex flex-col justify-center items-center h-full">
+        <p-message severity="error" [text]="error()!"></p-message>
+      </div>
+
+      <!-- Empty -->
+      <div *ngIf="!loading() && !error() && collections()?.length === 0"
+           class="flex flex-col justify-center items-center h-full">
+        <i class="ph ph-empty" style="font-size: 32px"></i>
+        <span class="font-semibold">No collections found.</span>
+        <span>Start by creating a <span class="text-yellow-300">New</span> one</span>
+      </div>
+</section>
+
+<app-create-card-collection-form
+    [visible]="dialogOpen()"
+    (closed)="closeDialog($event)"
+    (created)="reload()"
+/>
+<p-confirmDialog></p-confirmDialog>
