@@ -27,7 +27,7 @@ export const appConfig: ApplicationConfig = {
       domain: environment.auth.domain,
       clientId: environment.auth.clientId,
       authorizationParams: {
-        redirect_uri: window.location.origin,
+        redirect_uri: window.location.origin + '/app/dashboard',
         audience: environment.auth.audience
       },
       cacheLocation: 'localstorage',

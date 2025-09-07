@@ -7,12 +7,10 @@ export class AuthenticationService {
 
     constructor(private readonly auth: AuthService) {
         auth.getAccessTokenSilently()
-            .subscribe({ 
-                next: token => this.accessToken = token, 
-                error: (err) => {
-                    if (err.error === 'missing_refresh_token' || err.error === 'invalid_grant') {
-                        this.auth.loginWithRedirect();
-                    }
+            .subscribe({
+                next: token => this.accessToken = token,
+                error: () => {
+                    // TODO: Fix access token retrieval error
                 }
             });
     }
