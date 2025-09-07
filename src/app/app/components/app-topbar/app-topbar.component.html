@@ -1,0 +1,28 @@
+<div class="flex justify-between items-center me-3">
+    <span class="font-semibold text-2xl mt-3 mb-2 ps-2">{{ title() }}</span>
+
+    <div class="flex gap-3 items-center">
+        <p-iconField class="mt-2" iconPosition="left">
+            <p-inputIcon class="ph ph-magnifying-glass" [style.top.px]="14"></p-inputIcon>
+            <input type="text" pInputText class="p-inputtext-sm" [formControl]="searchCtrl" placeholder="Search" />
+        </p-iconField>
+
+        <i class="ph ph-bell p-overlay-badge mt-2 hover:bg-slate-700 rounded-full p-2" style="font-size: 1.5rem"></i>
+
+        <p-menu #userMenu [popup]="true" [model]="items"></p-menu>
+
+        <div (click)="userMenu.toggle($event)"
+            class="flex items-center hover:bg-slate-700 p-1 mt-2 rounded-lg cursor-pointer">
+            @if (user()?.picture) {
+                <p-avatar [image]="user()?.picture!" size="normal"
+                    shape="circle"></p-avatar>
+            }
+
+            @if (user()?.given_name) {
+                <span class="ms-3 font-semibold">{{ user()?.given_name }}</span>
+            }
+            
+            <i class="ph ph-caret-down ms-2"></i>
+        </div>
+    </div>
+</div>
