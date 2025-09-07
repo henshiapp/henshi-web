@@ -1,0 +1,12 @@
+<div class="flex bg-slate-950 max-h-screen">
+  <app-app-sidebar></app-app-sidebar>
+
+  <div class="flex flex-col w-full">
+    <app-app-topbar></app-app-topbar>
+
+    <div class="p-5 m-2 rounded-lg bg-slate-900 border-slate-700 border-1 shadow-lg overflow-y-auto h-full">
+      <app-app-breadcrumb></app-app-breadcrumb>
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

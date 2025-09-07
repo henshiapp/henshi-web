@@ -1,0 +1,38 @@
+<div class="bg-slate-950 px-2 min-h-screen flex relative lg:static">
+    <div class="h-screen block flex-shrink-0 absolute lg:static left-0 top-0 z-1 border-right-1 border-zinc-700 select-none"
+        style="width: 280px">
+        <div class="flex flex-col justify-between h-full px-4">
+            <div>
+                <div class="flex items-center justify-between pt-5 flex-shrink-0 pb-4 border-b-1 border-zinc-700">
+                    <a routerLink="/" class="w-40 inline-flex">
+                        <img src="/logo-full.svg" alt="Logo" />
+                    </a>
+                </div>
+
+                <div class="overflow-y-auto">
+                    <ul class="flex flex-col list-none pt-3 mt-5 gap-1">
+                        <ng-container *ngFor="let section of menu()">
+                            <div>
+                                <h3 class="mb-3">{{ section.name }}</h3>
+
+                                @for (item of section.children; track item.path) {
+                                <a [routerLink]="item.path"
+                                    routerLinkActive="bg-slate-900 border-slate-700 border-1 mt-2"
+                                    [routerLinkActiveOptions]="{ exact: false }"
+                                    class="rounded-lg mt-1 p-3 flex gap-2 items-center transition font-semibold cursor-pointer hover:bg-slate-800 hover:rounded-lg">
+                                    <i class="text-xl {{ item.icon }}"></i>
+                                    <span class="font-medium">{{ item.name }}</span>
+                                </a>
+                                }
+                            </div>
+                        </ng-container>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="flex justify-center items-center py-4 border-t-1 border-slate-700">
+                Henshi © 2025
+            </div>
+        </div>
+    </div>
+</div>

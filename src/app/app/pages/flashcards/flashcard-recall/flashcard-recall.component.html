@@ -1,0 +1,78 @@
+<div class="flex justify-end items-center mb-5">
+    <app-timer [isRunning]="sessionRunning()"></app-timer>
+</div>
+
+<div class="flex h-full justify-center items-center">
+    @if (isLoadingState()) {
+    @if (flashcardsService.error()) {
+    <p-message severity="error" [text]="flashcardsService.error()!"></p-message>
+    } @else if(flashcardsService.flashcardsToRecall().length === 0 && (!flashcardsService.loading ||
+    !flashcardsService.error())) {
+    <div class="flex flex-col items-center gap-5 text-xl">
+        No flashcards available for recall at this moment.
+        <a routerLink="/app/card-collections"><button pButton label="Go back"></button></a>
+    </div>
+    } @else {
+    <app-loading-spinner></app-loading-spinner>
+    }
+    }
+
+    @if (isCountingState()) {
+    <div class="flex flex-col justify-center items-center font-bold">
+        <span class="text-3xl">Starting in</span>
+        <span class="text-6xl">{{ getCounter() }}</span>
+    </div>
+    }
+
+    @if (isRunningState()) {
+    <div class="flex flex-col">
+        <div class="group h-96 w-96 [perspective:1000px]">
+            <div class="relative h-full w-full rounded-xl shadow-xl transition-all duration-500 [transform-style:preserve-3d]"
+                [class]="{ '[transform:rotateY(180deg)]': cardIsFlipped() }">
+                <div class='absolute inset-0 h-full w-full p-3 bg-slate-800 border-1 border-slate-700 rounded-xl text-center overflow-y-scroll [backface-visibility:hidden]'
+                    [ngClass]="{'flex justify-center items-center': cardIsLoading()}">
+                    @if (cardIsLoading()) {
+                    <app-loading-spinner></app-loading-spinner>
+                    } @else {
+                    {{ currentFlashcard().question }}
+                    }
+                </div>
+                <div class='[transform:rotateY(180deg)] absolute inset-0 h-full w-full p-3 bg-slate-800 border-1 border-slate-700 rounded-xl text-center overflow-y-scroll [backface-visibility:hidden]'
+                    [ngClass]="{'flex justify-center items-center': cardIsLoading()}">
+                    @if (cardIsLoading()) {
+                    <app-loading-spinner></app-loading-spinner>
+                    } @else {
+                    {{ currentFlashcard().answer }}
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="flex justify-center mt-10">
+            @if (cardIsFlipped()) {
+            <div class="flex gap-2">
+                <button pButton icon="ph ph-check" label="Correct" (click)="onCorrectAnswer()"
+                    class="p-button-success"></button>
+                <button pButton icon="ph ph-x" label="Wrong" (click)="onWrongAnswer()" class="p-button-danger"></button>
+            </div>
+            } @else {
+            <button pButton label="Flip" (click)="flipCard()"></button>
+            }
+        </div>
+    </div>
+    }
+</div>
+
+@if (isFinishedState()) {
+<div class="flex flex-col">
+    <div class="flex gap-3 font-bold text-4xl mb-5">
+        <i class="ph ph-confetti text-amber-300" style="font-size: 48px"></i>
+        Session completed!
+    </div>
+    <div class="text-2xl">
+        <span class="font-semibold">Score:</span> {{ score() }}/{{ total() }}
+    </div>
+    <div class="flex justify-center mt-20">
+        <a routerLink="/app/card-collections"><button pButton label="Go back"></button></a>
+    </div>
+</div>
+}

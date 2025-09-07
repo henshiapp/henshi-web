@@ -1,0 +1,11 @@
+@if (isLoading) {
+<app-loading-spinner></app-loading-spinner>
+} @else {
+<div class='absolute inset-0 h-full w-full p-3 bg-slate-800 border-1 border-slate-700 rounded-xl text-center overflow-y-scroll [backface-visibility:hidden]'
+    [ngClass]="{ 
+        '[transform:rotateY(180deg)]': side === 'BACK', 
+        'flex justify-center items-center': isLoading 
+    }">
+    {{ text }}
+</div>
+}

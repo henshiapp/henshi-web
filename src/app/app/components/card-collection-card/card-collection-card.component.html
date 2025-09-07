@@ -1,0 +1,23 @@
+<div [routerLink]="['/app/card-collections', collection.id, 'flashcards']" class="flex flex-col min-h-38 bg-slate-800 border border-slate-600
+            hover:bg-slate-700 transition rounded-lg p-2 cursor-pointer">
+    <div class="flex justify-between mt-1">
+        <div class="flex items-center">
+            <div class="flex items-center bg-slate-600 rounded-lg p-2 me-2">
+                <i class="ph {{ collection.icon }}"></i>
+            </div>
+            <span class="font-semibold text-lg">{{ collection.title }}</span>
+        </div>
+        <button pButton severity="secondary" text icon="ph ph-dots-three-vertical"
+            (click)="cardOptions.toggle($event); $event.stopPropagation()"></button>
+    </div>
+    <span class="my-2 text-gray-400">
+        {{ collection.description || 'No description' }}
+    </span>
+</div>
+
+<p-popover #cardOptions>
+    <div class="flex flex-col">
+        <button pButton severity="secondary" text icon="ph ph-trash" label="Delete"
+            (click)="confirmDelete($event)"></button>
+    </div>
+</p-popover>
