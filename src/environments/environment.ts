@@ -5,6 +5,6 @@ export const environment = {
         audience: 'http://localhost:5059'
     },
     api: {
-        url: 'http://localhost:5059/api'
+        url: 'http://localhost:5059'
     }
 }
