@@ -30,7 +30,7 @@ export class AuthenticationService {
     }
 
     login() {
-        return this.auth.loginWithRedirect();
+        return this.auth.loginWithRedirect({ authorizationParams: { redirect_uri: window.location.origin + '/app/dashboard' } });
     }
 
     register() {
