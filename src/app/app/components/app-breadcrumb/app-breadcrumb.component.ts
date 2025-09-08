@@ -15,7 +15,7 @@ export class AppBreadcrumbComponent {
   private bc = inject(BreadcrumbService);
 
   items = signal<MenuItem[]>([]);
-  home: MenuItem = { icon: 'ph ph-house', routerLink: '/' };
+  home: MenuItem = { icon: 'ph ph-house', routerLink: '/app/dashboard' };
 
   constructor() {
     this.bc.crumbs$.subscribe((crumbs) => {
