@@ -7,7 +7,7 @@ import { ToastService } from '../../../core/services/toast.service';
 import { CardCollectionsService } from '../../services/card-collections.service';
 import { CardCollection } from '../../../core/types/CardCollection';
 import { ConfirmDialogModule } from "primeng/confirmdialog";
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MenuItem } from 'primeng/api';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Popover } from "primeng/popover";
 
@@ -26,10 +26,26 @@ export class CardCollectionCardComponent {
   private toast = inject(ToastService);
   private confirmation = inject(ConfirmationService);
 
-  confirmDelete(event: Event) {
+  options: MenuItem[] = [];
+
+  ngOnInit() {
+    this.options = [
+      {
+        label: 'Options',
+        items: [
+          {
+            label: 'Remove',
+            icon: 'ph ph-trash',
+            command: () => this.confirmDelete()
+          },
+        ]
+      }
+    ];
+  }
+
+  confirmDelete() {
     this.confirmation.confirm(
       {
-        target: event.target as EventTarget,
         header: 'Do you really want to delete this collection?',
         message: 'This action is irreversible and will delete all flashcards associated with it',
         icon: 'ph ph-warning',
@@ -57,6 +73,5 @@ export class CardCollectionCardComponent {
         reject: () => { },
       }
     );
-    event.preventDefault();
   }
 }

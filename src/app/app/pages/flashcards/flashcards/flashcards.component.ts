@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, model, OnInit, signal } from '@angular/core';
 import { RouterModule, ActivatedRoute } from '@angular/router';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TagModule } from 'primeng/tag';
@@ -15,6 +15,7 @@ import { ROUTES } from '../../../routes';
 import { SearchService } from '../../../../core/services/search.service';
 import { firstValueFrom } from 'rxjs';
 import { PaginatorModule, PaginatorState } from "primeng/paginator";
+import { MenuModule } from "primeng/menu";
 
 @Component({
   selector: 'app-flashcards',
@@ -27,8 +28,9 @@ import { PaginatorModule, PaginatorState } from "primeng/paginator";
     ScrollPanelModule,
     LoadingSpinnerComponent,
     CreateFlashcardFormComponent,
-    PaginatorModule
-  ],
+    PaginatorModule,
+    MenuModule
+],
   providers: [ConfirmationService, MessageService],
   templateUrl: './flashcards.component.html',
   styleUrl: './flashcards.component.css',
@@ -44,6 +46,7 @@ export class FlashcardsComponent implements OnInit {
   protected flashcardsService = inject(FlashcardsService);
 
   collectionId = this.route.snapshot.paramMap.get('collectionId') ?? '';
+  selectedFlashcardId = signal<string | null>(null);
   showCreateDialog = signal(false);
   isCreateDialogOpen = signal(false);
   page = signal(1);
@@ -55,9 +58,28 @@ export class FlashcardsComponent implements OnInit {
   loading = this.flashcardsService.loading;
   error = this.flashcardsService.error;
 
+  options: MenuItem[] = [];
+
   ngOnInit() {
     this.title.setTitle('Flashcards');
     this.breadcrumb.set([{ label: 'Collections', path: ROUTES.cardCollections }, { label: 'Flashcards', path: window.location.pathname }]);
+
+    this.options = [
+      {
+        label: 'Options',
+        items: [
+          {
+            label: 'Remove',
+            icon: 'ph ph-trash',
+            command: () => {
+              if (this.selectedFlashcardId()) {
+                this.confirmDelete(this.selectedFlashcardId()!)
+              }
+            }
+          },
+        ]
+      }
+    ];
 
     if (this.collectionId) {
       this.flashcardsService.load(this.collectionId, undefined, this.page(), this.pageSize());

@@ -7,17 +7,12 @@
             </div>
             <span class="font-semibold text-lg">{{ collection.title }}</span>
         </div>
-        <button pButton severity="secondary" text icon="ph ph-dots-three-vertical"
-            (click)="cardOptions.toggle($event); $event.stopPropagation()"></button>
+        <p-button (click)="menu.toggle($event); $event.stopPropagation()" severity="secondary"
+            icon="ph ph-dots-three-vertical" />
     </div>
     <span class="my-2 text-gray-400">
         {{ collection.description || 'No description' }}
     </span>
 </div>
 
-<p-popover #cardOptions>
-    <div class="flex flex-col">
-        <button pButton severity="secondary" text icon="ph ph-trash" label="Delete"
-            (click)="confirmDelete($event)"></button>
-    </div>
-</p-popover>
+<p-menu #menu [model]="options" [popup]="true" />
