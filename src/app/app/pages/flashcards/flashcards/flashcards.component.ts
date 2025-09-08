@@ -1,4 +1,3 @@
-import { OnPageChangeResponse } from '../../../../shared/components/pagination/pagination.component';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, model, OnInit, signal } from '@angular/core';
 import { RouterModule, ActivatedRoute } from '@angular/router';
@@ -8,7 +7,6 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TagModule } from 'primeng/tag';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
-import { PaginationComponent } from '../../../../shared/components/pagination/pagination.component';
 import { CreateFlashcardFormComponent } from '../../../components/create-flashcard-form/create-flashcard-form.component';
 import { FlashcardsService } from '../../../services/flashcards.service';
 import { PageTitleService } from '../../../../core/services/page-title.service';
@@ -16,6 +14,7 @@ import { BreadcrumbService } from '../../../../core/services/breadcrumb.service'
 import { ROUTES } from '../../../routes';
 import { SearchService } from '../../../../core/services/search.service';
 import { firstValueFrom } from 'rxjs';
+import { PaginatorModule, PaginatorState } from "primeng/paginator";
 
 @Component({
   selector: 'app-flashcards',
@@ -26,9 +25,9 @@ import { firstValueFrom } from 'rxjs';
     ConfirmDialogModule,
     TagModule,
     ScrollPanelModule,
-    PaginationComponent,
     LoadingSpinnerComponent,
     CreateFlashcardFormComponent,
+    PaginatorModule
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './flashcards.component.html',
@@ -48,7 +47,8 @@ export class FlashcardsComponent implements OnInit {
   showCreateDialog = signal(false);
   isCreateDialogOpen = signal(false);
   page = signal(1);
-  pageSize = signal(3);
+  pageSize = signal(10);
+  first = signal((this.page() - 1) * this.pageSize());
 
   flashcards = this.flashcardsService.flashcards;
   metadata = this.flashcardsService.metadata;
@@ -68,7 +68,7 @@ export class FlashcardsComponent implements OnInit {
     })
   }
 
-  async reload({ page, pageSize }: OnPageChangeResponse = { page: this.page(), pageSize: this.pageSize() }) {
+  async reload({ page, pageSize } = { page: this.page(), pageSize: this.pageSize() }) {
     const search = await firstValueFrom(this.searchService.search$);
     this.flashcardsService.load(this.collectionId, search, page, pageSize);
   }
@@ -100,5 +100,15 @@ export class FlashcardsComponent implements OnInit {
         });
       },
     });
+  }
+
+  onPageChange(event: PaginatorState) {
+    if (event.first != null) {
+      this.first.set(event.first);
+    }
+    if (event.page != null && event.rows != null) {
+      return this.reload({ page: event.page + 1, pageSize: event.rows })
+    }
+    return this.reload();
   }
 }

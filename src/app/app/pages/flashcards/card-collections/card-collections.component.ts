@@ -9,9 +9,9 @@ import { CardCollectionsService } from '../../../services/card-collections.servi
 import { CardCollectionCardComponent } from '../../../components/card-collection-card/card-collection-card.component';
 import { CreateCardCollectionFormComponent } from '../../../components/create-card-collection-form/create-card-collection-form.component';
 import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
-import { OnPageChangeResponse, PaginationComponent } from '../../../../shared/components/pagination/pagination.component';
 import { SearchService } from '../../../../core/services/search.service';
 import { firstValueFrom } from 'rxjs';
+import { PaginatorModule, PaginatorState } from "primeng/paginator";
 
 @Component({
   selector: 'app-card-collections',
@@ -23,8 +23,8 @@ import { firstValueFrom } from 'rxjs';
     CreateCardCollectionFormComponent,
     CardCollectionCardComponent,
     LoadingSpinnerComponent,
-    PaginationComponent
-  ],
+    PaginatorModule
+],
   templateUrl: './card-collections.component.html',
   styleUrl: './card-collections.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -42,6 +42,7 @@ export class CardCollectionsComponent implements OnInit {
 
   page = signal(1);
   pageSize = signal(10);
+  first = signal((this.page() - 1) * this.pageSize())
   dialogOpen = signal(false);
 
   ngOnInit() {
@@ -62,8 +63,18 @@ export class CardCollectionsComponent implements OnInit {
     if (refresh) this.reload();
   }
 
-  async reload({ page, pageSize }: OnPageChangeResponse = { page: this.page(), pageSize: this.pageSize() }) {
+  async reload({ page, pageSize } = { page: this.page(), pageSize: this.pageSize() }) {
     const search = await firstValueFrom(this.searchService.search$);
     this.service.fetch(search, page, pageSize);
+  }
+
+  onPageChange(event: PaginatorState) {
+      if (event.first != null) {
+      this.first.set(event.first);
+    }
+    if (event.page != null && event.rows != null) {
+      return this.reload({ page: event.page + 1, pageSize: event.rows })
+    }
+    return this.reload();
   }
 }

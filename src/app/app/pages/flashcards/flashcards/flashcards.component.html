@@ -36,8 +36,11 @@
                 </div>
             </div>
         </p-scrollPanel>
-        <app-pagination [metadata]="metadata()!" [page]="page()" [pageSize]="pageSize()" (onPageChange)="reload($event)"
-            [pageSizeOptions]="[3, 5, 10]"></app-pagination>
+        <p-paginator (onPageChange)="onPageChange($event)" [first]="first()" [rows]="pageSize()"
+            [totalRecords]="metadata()?.totalElements" [rowsPerPageOptions]="[10, 20, 30]" [style]="{
+                background: 'transparent'
+            }">
+        </p-paginator>
     </ng-container>
 
     <ng-template #empty>
