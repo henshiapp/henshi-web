@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-timer',
@@ -14,6 +14,8 @@ export class TimerComponent implements OnChanges {
   private intervalId: any = null;
   elapsed = 0;
 
+  cdr = inject(ChangeDetectorRef)
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes['isRunning']) {
       if (this.isRunning) {
@@ -28,6 +30,7 @@ export class TimerComponent implements OnChanges {
     this.startedAt = Date.now();
     this.intervalId = setInterval(() => {
       this.elapsed = this.elapsedBefore + Math.floor((Date.now() - this.startedAt) / 1000);
+      this.cdr.markForCheck();
     }, 250);
   }
 
