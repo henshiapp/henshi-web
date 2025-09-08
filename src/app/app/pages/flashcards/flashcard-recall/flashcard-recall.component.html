@@ -60,19 +60,19 @@
         </div>
     </div>
     }
+    
+    @if (isFinishedState()) {
+    <div class="flex flex-col">
+        <div class="flex gap-3 font-bold text-4xl mb-5">
+            <i class="ph ph-confetti text-amber-300" style="font-size: 48px"></i>
+            Session completed!
+        </div>
+        <div class="text-2xl">
+            <span class="font-semibold">Score:</span> {{ score() }}/{{ total() }}
+        </div>
+        <div class="flex justify-center mt-20">
+            <a routerLink="/app/card-collections"><button pButton label="Go back"></button></a>
+        </div>
+    </div>
+    }
 </div>
-
-@if (isFinishedState()) {
-<div class="flex flex-col">
-    <div class="flex gap-3 font-bold text-4xl mb-5">
-        <i class="ph ph-confetti text-amber-300" style="font-size: 48px"></i>
-        Session completed!
-    </div>
-    <div class="text-2xl">
-        <span class="font-semibold">Score:</span> {{ score() }}/{{ total() }}
-    </div>
-    <div class="flex justify-center mt-20">
-        <a routerLink="/app/card-collections"><button pButton label="Go back"></button></a>
-    </div>
-</div>
-}
