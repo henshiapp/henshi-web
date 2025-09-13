@@ -7,10 +7,9 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MessageModule } from 'primeng/message';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { TimerComponent } from '../../../../shared/components/timer/timer.component';
-import { RecallCardComponent } from '../../../components/recall-card/recall-card.component';
 import { FlashcardsService } from '../../../services/flashcards.service';
 import { LoadingSpinnerComponent } from "../../../../shared/components/loading-spinner/loading-spinner.component";
-import { SearchService } from '../../../../core/services/search.service';
+import { QuillViewComponent } from "ngx-quill";
 
 enum States {
   LOADING = 'LOADING',
@@ -35,8 +34,9 @@ enum Events {
     MessageModule,
     ConfirmDialogModule,
     TimerComponent,
-    LoadingSpinnerComponent
-],
+    LoadingSpinnerComponent,
+    QuillViewComponent
+  ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './flashcard-recall.component.html',
   styleUrl: './flashcard-recall.component.css',
@@ -46,7 +46,6 @@ export class FlashcardRecallComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   protected flashcardsService = inject(FlashcardsService);
   private message = inject(MessageService);
-  private searchService = inject(SearchService);
 
   state = signal<States>(States.LOADING);
   dispatch = (e: Events) => {

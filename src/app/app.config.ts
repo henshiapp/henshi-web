@@ -10,6 +10,14 @@ import { ThemePreset } from './core/themes/preset';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastService } from './core/services/toast.service';
+import { provideQuillConfig } from 'ngx-quill/config';
+import hljs from 'highlight.js';
+import utc from 'dayjs/plugin/utc'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import dayjs from 'dayjs';
+
+dayjs.extend(utc);
+dayjs.extend(relativeTime);
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -42,8 +50,30 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {
-        preset: ThemePreset
-      }
+        preset: ThemePreset,
+      },
+    }),
+    provideQuillConfig({
+      theme: 'snow',
+      modules: {
+        syntax: { hljs },
+        toolbar: {
+          container: [
+            ['bold', 'italic', 'underline', 'strike'],
+            ['blockquote', 'code-block'],
+            ['link', 'formula'], //['link', 'image', 'video', 'formula'],
+
+            [{ 'header': 1 }, { 'header': 2 }],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            [{ 'script': 'sub' }, { 'script': 'super' }],
+            [{ 'indent': '-1' }, { 'indent': '+1' }],
+
+            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+            [{ 'align': [] }],
+          ]
+        }
+      },
     }),
     MessageService,
     ToastService,

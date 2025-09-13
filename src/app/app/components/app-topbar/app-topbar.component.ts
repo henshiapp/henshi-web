@@ -35,10 +35,8 @@ import { SearchService } from '../../../core/services/search.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppTopbarComponent {
-  private router = inject(Router);
   private pageTitle = inject(PageTitleService);
   private auth = inject(AuthenticationService);
-  private searchService = inject(SearchService);
 
   title = signal<string>('');
   user = signal<User | null | undefined>(null);
@@ -58,14 +56,6 @@ export class AppTopbarComponent {
     this.subs.add(this.pageTitle.title$.subscribe(t => this.title.set(t)));
 
     this.subs.add(this.auth.user$.subscribe(u => (this.user.set(u))));
-
-    this.subs.add(
-      this.searchCtrl.valueChanges
-        .pipe(debounceTime(400), distinctUntilChanged())
-        .subscribe((search) => {
-          this.searchService.setSearch((search ?? '').trim());
-        }),
-    );
   }
 
   ngOnDestroy() {

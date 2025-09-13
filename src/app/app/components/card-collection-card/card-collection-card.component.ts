@@ -9,11 +9,10 @@ import { CardCollection } from '../../../core/types/CardCollection';
 import { ConfirmDialogModule } from "primeng/confirmdialog";
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Popover } from "primeng/popover";
 
 @Component({
   selector: 'app-card-collection-card',
-  imports: [CommonModule, RouterModule, ButtonModule, MenuModule, ConfirmDialogModule, Popover],
+  imports: [CommonModule, RouterModule, ButtonModule, MenuModule, ConfirmDialogModule],
   templateUrl: './card-collection-card.component.html',
   styleUrl: './card-collection-card.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
