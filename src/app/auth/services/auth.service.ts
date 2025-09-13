@@ -3,18 +3,10 @@ import { AuthService } from "@auth0/auth0-angular";
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
-    _accessToken?: string;
-
-    constructor(private readonly auth: AuthService) {
-        auth.getAccessTokenSilently().subscribe(token => this._accessToken = token);
-    }
+    constructor(private readonly auth: AuthService) {}
 
     get accessToken() {
-        if (!this._accessToken) {
-            this.auth.getAccessTokenSilently().subscribe(token => this._accessToken = token);
-        }
-
-        return this._accessToken;
+        return this.auth.getAccessTokenSilently();
     }
 
     get user$() {

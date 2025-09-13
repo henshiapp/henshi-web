@@ -10,6 +10,7 @@ import { icons } from "@phosphor-icons/core";
 import { CardCollectionsService } from '../../services/card-collections.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { CardCollection } from '../../../core/types/CardCollection';
+import { Drawer } from "primeng/drawer";
 
 @Component({
   selector: 'app-create-card-collection-form',
@@ -21,8 +22,9 @@ import { CardCollection } from '../../../core/types/CardCollection';
     ButtonModule,
     ReactiveFormsModule,
     PopoverModule,
-    FormsModule
-  ],
+    FormsModule,
+    Drawer
+],
   templateUrl: './create-card-collection-form.component.html',
   styleUrl: './create-card-collection-form.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -45,7 +47,7 @@ export class CreateCardCollectionFormComponent {
   });
   icons = icons
 
-  submitting = signal(false);
+  loading = signal(false);
 
 
   handleClose() {
@@ -55,19 +57,19 @@ export class CreateCardCollectionFormComponent {
 
   submit() {
     if (this.form.invalid) return;
-    this.submitting.set(true);
+    this.loading.set(true);
 
     this.service.create(this.form.value as Partial<CardCollection>).subscribe({
       next: () => {
         this.toast.success('Collection created successfully');
-        this.submitting.set(false);
+        this.loading.set(false);
         this.closed.emit(true);
         this.created.emit();
         this.form.reset({ icon: 'ph-cards' });
       },
       error: (err) => {
         this.toast.error('Error creating collection', err.message);
-        this.submitting.set(false);
+        this.loading.set(false);
         this.closed.emit(false);
       }
     });

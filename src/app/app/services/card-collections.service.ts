@@ -25,11 +25,7 @@ export class CardCollectionsService {
           ...(page ? { page: page.toString() } : {}),
           ...(pageSize ? { pageSize: pageSize.toString() } : {}),
           ...(search ? { search } : {}),
-        },
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.auth.accessToken}`,
-        },
+        }
       })
       .pipe(
         tap({
@@ -48,20 +44,10 @@ export class CardCollectionsService {
   }
 
   create(payload: Partial<CardCollection>) {
-    return this.http.post<CardCollection>(environment.api.url + '/v1/card-collections', payload, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${this.auth.accessToken}`,
-      },
-    });
+    return this.http.post<CardCollection>(environment.api.url + '/v1/card-collections', payload);
   }
 
   delete(id: string) {
-    return this.http.delete(environment.api.url + `/v1/card-collections/${id}`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${this.auth.accessToken}`,
-      },
-    });
+    return this.http.delete(environment.api.url + `/v1/card-collections/${id}`);
   }
 }

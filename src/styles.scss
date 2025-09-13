@@ -1,6 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 @use "tailwindcss";
-@import '../node_modules/@phosphor-icons/web/src/regular/style';
+@import '../node_modules/@phosphor-icons/web/src/regular/style/';
+@import "../node_modules/highlight.js/styles/atom-one-dark.min.css";
+@import 'quill/dist/quill.snow.css';
 
 a {
     text-decoration: none;
@@ -13,4 +15,41 @@ body {
 
 .ph {
     font-size: 22px;
+}
+
+.ql-toolbar {
+    background-color: var(--color-slate-800);
+    border: 1px solid var(--color-slate-600) !important;
+    border-radius: 10px 10px 0 0;
+}
+
+.ql-container {
+    background-color: var(--color-slate-950);
+    border: 1px solid var(--color-slate-600) !important;
+    border-radius: 0 0 10px 10px;
+}
+
+.ngx-quill-view {
+    background-color: var(--color-slate-800);
+    border-radius: 10px;
+}
+
+.ql-stroke {
+    stroke: white !important;
+}
+
+.ql-fill {
+    fill: white !important;
+}
+
+.ql-picker-label {
+    color: white !important;
+}
+
+.ql-picker-options {
+    background-color: var(--color-slate-800) !important;
+}
+
+.ql-picker-item {
+    color: white !important;
 }

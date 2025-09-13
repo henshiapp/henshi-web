@@ -10,8 +10,12 @@ import { CardCollectionCardComponent } from '../../../components/card-collection
 import { CreateCardCollectionFormComponent } from '../../../components/create-card-collection-form/create-card-collection-form.component';
 import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
 import { SearchService } from '../../../../core/services/search.service';
-import { firstValueFrom } from 'rxjs';
+import { debounceTime, firstValueFrom } from 'rxjs';
 import { PaginatorModule, PaginatorState } from "primeng/paginator";
+import { IconField } from "primeng/iconfield";
+import { InputIcon } from "primeng/inputicon";
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { InputText } from 'primeng/inputtext';
 
 @Component({
   selector: 'app-card-collections',
@@ -23,7 +27,11 @@ import { PaginatorModule, PaginatorState } from "primeng/paginator";
     CreateCardCollectionFormComponent,
     CardCollectionCardComponent,
     LoadingSpinnerComponent,
-    PaginatorModule
+    PaginatorModule,
+    InputIcon,
+    InputText,
+    IconField,
+    ReactiveFormsModule
 ],
   templateUrl: './card-collections.component.html',
   styleUrl: './card-collections.component.css',
@@ -45,13 +53,19 @@ export class CardCollectionsComponent implements OnInit {
   first = signal((this.page() - 1) * this.pageSize())
   dialogOpen = signal(false);
 
+  searchControl = new FormControl();
+  search = signal('');
+
   ngOnInit() {
     this.titleService.setTitle('Card collections');
     this.breadcrumbService.set([{ label: 'Collections', path: '/app/card-collections' }]);
-    this.service.fetch();
-    this.searchService.search$.subscribe(async (search) => {
-      this.service.fetch(search, this.page(), this.pageSize());
+
+    this.searchControl.valueChanges.pipe(debounceTime(500)).subscribe(search => {
+      this.search.set(search);
+      this.service.fetch(this.search(), this.page(), this.pageSize());
     })
+
+    this.service.fetch();
   }
 
   openDialog() {

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, model, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, model, OnInit, signal } from '@angular/core';
 import { RouterModule, ActivatedRoute } from '@angular/router';
 import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -12,10 +12,16 @@ import { FlashcardsService } from '../../../services/flashcards.service';
 import { PageTitleService } from '../../../../core/services/page-title.service';
 import { BreadcrumbService } from '../../../../core/services/breadcrumb.service';
 import { ROUTES } from '../../../routes';
-import { SearchService } from '../../../../core/services/search.service';
-import { firstValueFrom } from 'rxjs';
+import { debounceTime } from 'rxjs';
 import { PaginatorModule, PaginatorState } from "primeng/paginator";
 import { MenuModule } from "primeng/menu";
+import { QuillViewComponent } from 'ngx-quill';
+import { InputIcon } from "primeng/inputicon";
+import { InputText } from "primeng/inputtext";
+import { IconField } from 'primeng/iconfield';
+import { TooltipModule } from 'primeng/tooltip';
+import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import dayjs from 'dayjs';
 
 @Component({
   selector: 'app-flashcards',
@@ -29,8 +35,15 @@ import { MenuModule } from "primeng/menu";
     LoadingSpinnerComponent,
     CreateFlashcardFormComponent,
     PaginatorModule,
-    MenuModule
-],
+    MenuModule,
+    QuillViewComponent,
+    InputIcon,
+    InputText,
+    IconField,
+    FormsModule,
+    ReactiveFormsModule,
+    TooltipModule
+  ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './flashcards.component.html',
   styleUrl: './flashcards.component.css',
@@ -42,16 +55,19 @@ export class FlashcardsComponent implements OnInit {
   private toast = inject(MessageService);
   private title = inject(PageTitleService);
   private breadcrumb = inject(BreadcrumbService);
-  private searchService = inject(SearchService);
   protected flashcardsService = inject(FlashcardsService);
 
   collectionId = this.route.snapshot.paramMap.get('collectionId') ?? '';
   selectedFlashcardId = signal<string | null>(null);
   showCreateDialog = signal(false);
   isCreateDialogOpen = signal(false);
+
   page = signal(1);
   pageSize = signal(10);
   first = signal((this.page() - 1) * this.pageSize());
+
+  searchControl = new FormControl();
+  search = signal('');
 
   flashcards = this.flashcardsService.flashcards;
   metadata = this.flashcardsService.metadata;
@@ -60,9 +76,16 @@ export class FlashcardsComponent implements OnInit {
 
   options: MenuItem[] = [];
 
+  dayjs = dayjs;
+  
   ngOnInit() {
     this.title.setTitle('Flashcards');
     this.breadcrumb.set([{ label: 'Collections', path: ROUTES.cardCollections }, { label: 'Flashcards', path: window.location.pathname }]);
+    
+    this.searchControl.valueChanges.pipe(debounceTime(500)).subscribe(search => {
+      this.search.set(search);
+      this.flashcardsService.load(this.collectionId, this.search(), this.page(), this.pageSize());
+    })
 
     this.options = [
       {
@@ -84,15 +107,10 @@ export class FlashcardsComponent implements OnInit {
     if (this.collectionId) {
       this.flashcardsService.load(this.collectionId, undefined, this.page(), this.pageSize());
     }
-
-    this.searchService.search$.subscribe(async (search) => {
-      this.flashcardsService.load(this.collectionId, search, this.page(), this.pageSize());
-    })
   }
 
   async reload({ page, pageSize } = { page: this.page(), pageSize: this.pageSize() }) {
-    const search = await firstValueFrom(this.searchService.search$);
-    this.flashcardsService.load(this.collectionId, search, page, pageSize);
+    this.flashcardsService.load(this.collectionId, this.search(), page, pageSize);
   }
 
   confirmDelete(id: string) {

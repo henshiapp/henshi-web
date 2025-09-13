@@ -1,4 +1,10 @@
-<div class="flex justify-end items-center mb-5">
+<div class="flex justify-between items-center my-5">
+    <div>
+        <p-iconfield>
+            <p-inputicon class="ph ph-magnifying-glass" />
+            <input type="text" pInputText placeholder="Search" [formControl]="searchControl" debounce="300" />
+        </p-iconfield>
+    </div>
     <div class="flex gap-2">
         <a [routerLink]="['recall']">
             <p-button icon="ph ph-play" size="small" label="Recall"></p-button>
@@ -15,11 +21,41 @@
 }
 @else {
 @if (!error() && flashcards().length > 0) {
-<p-scrollPanel styleClass="h-4/5">
-    <div *ngFor="let flashcard of flashcards(); let i = index" class="bg-slate-700 p-3 rounded-lg mb-3">
+<p-scrollPanel class="h-4/5">
+    @for (flashcard of flashcards(); track flashcard.id) {
+    <div class="bg-slate-700 p-3 rounded-lg mb-3">
         <div class="flex justify-between">
             <div class="flex gap-2">
-                <p-tag severity="info" [value]="flashcard.grade"></p-tag>
+                <p-tag severity="info" pTooltip="Difficulty" tooltipPosition="top">
+                    <i class="ph ph-gauge"></i>
+                    @switch(flashcard.grade) {
+                    @case ("VeryHard") {
+                    Very hard
+                    }
+                    @case ("Hard") {
+                    Hard
+                    }
+                    @case ("Medium") {
+                    Medium
+                    }
+                    @case ("Easy") {
+                    Easy
+                    }
+                    @case ("VeryEasy") {
+                    VeryEasy
+                    }
+                    @default {
+                    {{ flashcard.grade }}
+                    }
+                    }
+                </p-tag>
+                @let recallDate = dayjs(flashcard.nextRecall);
+                @let isOverdue = recallDate < dayjs.utc(); <p-tag [severity]="isOverdue ? 'danger' : 'info'"
+                    pTooltip="Next recall" tooltipPosition="top">
+                    <i class="ph ph-clock"></i>
+
+                    @if (isOverdue) { Overdue } @else { {{ recallDate.fromNow()
+                    }} } </p-tag>
             </div>
             <div class="flex gap-2">
                 <p-button (click)="selectedFlashcardId.set(flashcard.id); menu.toggle($event); $event.stopPropagation()"
@@ -27,14 +63,15 @@
             </div>
         </div>
         <div class="grid grid-cols-2 gap-2 mt-3 overflow-auto overflow-x-hidden">
-            <p-scrollPanel class="bg-slate-800 p-2 rounded-lg h-48">
-                {{ flashcard.question }}
-            </p-scrollPanel>
-            <p-scrollPanel class="bg-slate-800 p-2 rounded-lg h-48">
-                {{ flashcard.answer }}
-            </p-scrollPanel>
+            <div class="rounded-lg h-48">
+                <quill-view [content]="flashcard.question" format="html" theme="snow" [sanitize]="true"></quill-view>
+            </div>
+            <div class="rounded-lg h-48">
+                <quill-view [content]="flashcard.answer" format="html" theme="snow" [sanitize]="true"></quill-view>
+            </div>
         </div>
     </div>
+    }
 </p-scrollPanel>
 <p-paginator (onPageChange)="onPageChange($event)" [first]="first()" [rows]="pageSize()"
     [totalRecords]="metadata()?.totalElements" [rowsPerPageOptions]="[10, 20, 30]" [style]="{

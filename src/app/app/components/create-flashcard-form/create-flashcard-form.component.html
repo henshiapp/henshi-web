@@ -1,30 +1,25 @@
-<p-dialog
-  header="Create flashcard"
-  [(visible)]="visible"
-  [modal]="true"
-  [draggable]="false"
-  styleClass="w-1/2"
-  (onHide)="closed.emit()"
->
-  <form [formGroup]="form" class="flex flex-col gap-2" (ngSubmit)="onSubmit()">
-    <div class="grid grid-cols-2 gap-3">
-      <div class="flex flex-col">
-        <label class="mb-2" for="question">Question</label>
-        <textarea id="question" pInputTextarea formControlName="question" class="min-h-48" [maxlength]="3000"></textarea>
-        <small *ngIf="form.controls['question'].invalid && form.controls['question'].touched" class="text-red-400">
-          Question is required
-        </small>
-      </div>
-      <div class="flex flex-col">
-        <label class="mb-2" for="answer">Answer</label>
-        <textarea id="answer" pInputTextarea formControlName="answer" class="min-h-48" [maxlength]="3000"></textarea>
-        <small *ngIf="form.controls['answer'].invalid && form.controls['answer'].touched" class="text-red-400">
-          Answer is required
-        </small>
-      </div>
+<p-drawer [style]="{width: '50%'}" header="Create flashcard" [(visible)]="visible" position="right"
+  (onHide)="closed.emit()">
+  <form [formGroup]="form" class="flex flex-col gap-2 h-full" (ngSubmit)="onSubmit()">
+    <div class="flex flex-col">
+      <label class="mb-2" for="question">Question *</label>
+      <quill-editor formControlName="question" style="height: 20rem; width: 100%;"></quill-editor>
+      @if (form.controls['question'].invalid && form.controls['question'].touched) {
+      <small class="text-red-400">Question is required</small>
+      }
     </div>
-    <footer class="flex justify-end gap-3 mt-5">
-      <button pButton type="submit" label="Create" [disabled]="form.invalid"></button>
+
+    <div class="flex flex-col mt-15">
+      <label class="mb-2" for="answer">Answer *</label>
+      <quill-editor formControlName="answer" style="height: 20rem; width: 100%;"></quill-editor>
+      @if (form.controls['answer'].invalid && form.controls['answer'].touched) {
+      <small class="text-red-400">Answer is required</small>
+      }
+    </div>
+
+    <footer class="flex justify-end gap-3 mt-15">
+      <button pButton type="submit" label="Create" [loading]="loading()"
+        [disabled]="form.invalid || loading()"></button>
     </footer>
   </form>
-</p-dialog>
+</p-drawer>

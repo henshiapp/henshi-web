@@ -27,7 +27,12 @@
               }
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/quill/dist/quill.snow.css",
+              "node_modules/highlight.js/styles/atom-one-dark.min.css"
+            ],
+            "scripts": [
+              "node_modules/highlight.js/lib/core.js"
             ]
           },
           "configurations": {
@@ -45,12 +50,12 @@
                 }
               ],
               "outputHashing": "all",
-              "fileReplacements":[
-                  {
-                     "replace":"/src/environments/environment.ts",
-                     "with":"/src/environments/environment.production.ts"
-                  }
-               ]
+              "fileReplacements": [
+                {
+                  "replace": "/src/environments/environment.ts",
+                  "with": "/src/environments/environment.production.ts"
+                }
+              ]
             },
             "development": {
               "optimization": false,

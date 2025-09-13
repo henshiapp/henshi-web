@@ -1,4 +1,4 @@
-<p-dialog header="Create collection" [(visible)]="visible" [style]="{ width: '50vw' }" [modal]="true" [draggable]="false"
+<p-drawer header="Create collection" [(visible)]="visible" position="right" [style]="{ width: '50%' }"
     (onHide)="handleClose()">
     <form [formGroup]="form" class="flex flex-col gap-2" (ngSubmit)="submit()">
         <div class="flex gap-2">
@@ -22,10 +22,10 @@
         </div>
 
         <footer class="flex justify-end gap-3 mt-5">
-            <button pButton type="submit" [disabled]="form.invalid || submitting()">Create</button>
+            <button pButton type="submit" [loading]="loading()" [disabled]="form.invalid || loading()">Create</button>
         </footer>
     </form>
-</p-dialog>
+</p-drawer>
 
 <p-popover #op>
     <div class="flex flex-col gap-4 w-[25rem]">

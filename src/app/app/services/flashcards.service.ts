@@ -30,11 +30,7 @@ export class FlashcardsService {
                         ...(page ? { page: page?.toString() } : {}),
                         ...(pageSize ? { pageSize: pageSize?.toString() } : {}),
                         ...(search ? { search } : {}),
-                    },
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${this.auth.accessToken}`,
-                    },
+                    }
                 }
             )
             .pipe(
@@ -52,34 +48,18 @@ export class FlashcardsService {
     }
 
     create(collectionId: string, payload: Partial<Flashcard>) {
-        return this.http.post(`${this.apiUrl}/v1/card-collections/${collectionId}/flashcards`, payload, {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${this.auth.accessToken}`,
-            },
-        });
+        return this.http.post(`${this.apiUrl}/v1/card-collections/${collectionId}/flashcards`, payload);
     }
 
     delete(collectionId: string, id: string) {
-        return this.http.delete(`${this.apiUrl}/v1/card-collections/${collectionId}/flashcards/${id}`, {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${this.auth.accessToken}`,
-            },
-        });
+        return this.http.delete(`${this.apiUrl}/v1/card-collections/${collectionId}/flashcards/${id}`);
     }
 
     getRecall(collectionId: string) {
         this.loading.set(true);
         this.http
             .get<{ data: Flashcard[]; metadata: PaginationMetadata }>(
-                `${this.apiUrl}/v1/card-collections/${collectionId}/flashcards/recall`,
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${this.auth.accessToken}`,
-                    },
-                }
+                `${this.apiUrl}/v1/card-collections/${collectionId}/flashcards/recall`
             )
             .pipe(
                 tap(res => {
@@ -99,11 +79,6 @@ export class FlashcardsService {
     finishRecall(collectionId: string, answers: { flashcardId: string; correct: boolean; }[]) {
         return this.http.post(`${this.apiUrl}/v1/card-collections/${collectionId}/flashcards/recall`, {
             answers
-        }, {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${this.auth.accessToken}`,
-            },
         });
     }
 }

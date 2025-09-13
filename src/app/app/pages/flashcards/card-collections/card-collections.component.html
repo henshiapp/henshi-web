@@ -1,5 +1,11 @@
 <section id="catalogs" class="flex flex-col h-full">
-  <div class="flex justify-end items-center mb-5">
+  <div class="flex justify-between items-center my-5">
+    <div>
+      <p-iconfield>
+        <p-inputicon class="ph ph-magnifying-glass" />
+        <input type="text" pInputText placeholder="Search" [formControl]="searchControl" debounce="300" />
+      </p-iconfield>
+    </div>
     <button pButton size="small" icon="ph ph-plus" label="New" (click)="openDialog()"></button>
   </div>
 
@@ -11,7 +17,7 @@
       }
     </div>
     <p-paginator (onPageChange)="onPageChange($event)" [first]="first()" [rows]="pageSize()"
-        [totalRecords]="metadata()?.totalElements" [rowsPerPageOptions]="[10, 20, 30]" [style]="{
+      [totalRecords]="metadata()?.totalElements" [rowsPerPageOptions]="[10, 20, 30]" [style]="{
             background: 'transparent'
         }">
     </p-paginator>
