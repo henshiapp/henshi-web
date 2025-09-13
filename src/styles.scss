@@ -4,6 +4,13 @@
 @import "../node_modules/highlight.js/styles/atom-one-dark.min.css";
 @import 'quill/dist/quill.snow.css';
 
+:root {
+    --p-progressspinner-color-one: white !important;
+    --p-progressspinner-color-two: white !important;
+    --p-progressspinner-color-three: white !important;
+    --p-progressspinner-color-four: white !important;
+}
+
 a {
     text-decoration: none;
 }

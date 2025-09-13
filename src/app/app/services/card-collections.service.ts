@@ -20,7 +20,7 @@ export class CardCollectionsService {
     this.error.set(null);
 
     this.http
-      .get<ApiResponse<CardCollection[]>>(environment.api.url + `/v1/card-collections`, {
+      .get<ApiResponse<CardCollection[]>>(`/v1/card-collections`, {
         params: {
           ...(page ? { page: page.toString() } : {}),
           ...(pageSize ? { pageSize: pageSize.toString() } : {}),
@@ -44,10 +44,10 @@ export class CardCollectionsService {
   }
 
   create(payload: Partial<CardCollection>) {
-    return this.http.post<CardCollection>(environment.api.url + '/v1/card-collections', payload);
+    return this.http.post<CardCollection>('/v1/card-collections', payload);
   }
 
   delete(id: string) {
-    return this.http.delete(environment.api.url + `/v1/card-collections/${id}`);
+    return this.http.delete(`/v1/card-collections/${id}`);
   }
 }

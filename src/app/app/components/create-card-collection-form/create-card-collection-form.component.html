@@ -1,4 +1,4 @@
-<p-drawer header="Create collection" [(visible)]="visible" position="right" [style]="{ width: '50%' }"
+<p-drawer [style]="{width: breakpointObserver.isMatched(Breakpoints.Web) ? '50%' : '100%'}" header="Create collection" [(visible)]="visible" position="right" 
     (onHide)="handleClose()">
     <form [formGroup]="form" class="flex flex-col gap-2" (ngSubmit)="submit()">
         <div class="flex gap-2">

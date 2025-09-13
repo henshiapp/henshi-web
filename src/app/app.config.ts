@@ -15,6 +15,7 @@ import hljs from 'highlight.js';
 import utc from 'dayjs/plugin/utc'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import dayjs from 'dayjs';
+import { baseUrlHttpInterceptorFn } from './core/interceptors/base-url.interceptor';
 
 dayjs.extend(utc);
 dayjs.extend(relativeTime);
@@ -23,7 +24,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
-    provideHttpClient(withInterceptors([authHttpInterceptorFn])),
+    provideHttpClient(withInterceptors([baseUrlHttpInterceptorFn, authHttpInterceptorFn])),
     provideRouter(routes),
     provideAuth0({
       domain: environment.auth.domain,

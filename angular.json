@@ -33,6 +33,12 @@
             ],
             "scripts": [
               "node_modules/highlight.js/lib/core.js"
+            ],
+            "allowedCommonJsDependencies": [
+              "dayjs",
+              "dayjs/plugin/utc",
+              "dayjs/plugin/relativeTime",
+              "quill-delta"
             ]
           },
           "configurations": {
