@@ -1,3 +1,4 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, model, Output, signal } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -24,7 +25,7 @@ import { Drawer } from "primeng/drawer";
     PopoverModule,
     FormsModule,
     Drawer
-],
+  ],
   templateUrl: './create-card-collection-form.component.html',
   styleUrl: './create-card-collection-form.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,6 +38,7 @@ export class CreateCardCollectionFormComponent {
   private fb = inject(FormBuilder);
   private service = inject(CardCollectionsService);
   private toast = inject(ToastService);
+  protected breakpointObserver = inject(BreakpointObserver)
 
   iconSearch = model<string>('');
 
@@ -49,6 +51,7 @@ export class CreateCardCollectionFormComponent {
 
   loading = signal(false);
 
+  Breakpoints = Breakpoints;
 
   handleClose() {
     this.closed.emit(false);

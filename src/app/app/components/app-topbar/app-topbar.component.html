@@ -1,5 +1,10 @@
 <div class="flex justify-between items-center me-3">
-    <span class="font-semibold text-2xl mt-3 mb-2 ps-2">{{ title() }}</span>
+    <div class="flex items-center mt-3 mb-2">
+        @if (!breakpointObserver.isMatched(Breakpoints.Web)) {
+        <i class="ph ph-list ms-2 cursor-pointer" (click)="isMobileSidebarOpen.set(true)"></i>
+        }
+        <span class="font-semibold text-2xl ps-2">{{ title() }}</span>
+    </div>
 
     <div class="flex gap-3 items-center">
         <i class="ph ph-bell p-overlay-badge mt-2 hover:bg-slate-700 rounded-full p-2" style="font-size: 1.5rem"></i>
@@ -9,15 +14,18 @@
         <div (click)="userMenu.toggle($event)"
             class="flex items-center hover:bg-slate-700 p-1 mt-2 rounded-lg cursor-pointer">
             @if (user()?.picture) {
-                <p-avatar [image]="user()?.picture!" size="normal"
-                    shape="circle"></p-avatar>
+            <p-avatar [image]="user()?.picture!" size="normal" shape="circle"></p-avatar>
             }
 
             @if (user()?.given_name) {
-                <span class="ms-3 font-semibold">{{ user()?.given_name }}</span>
+            <span class="ms-3 font-semibold">{{ user()?.given_name }}</span>
             }
-            
+
             <i class="ph ph-caret-down ms-2"></i>
         </div>
     </div>
 </div>
+
+<p-drawer [(visible)]="isMobileSidebarOpen" [style]="{ width: '100%' }">
+    <app-app-sidebar [isMobile]="true"></app-app-sidebar>
+</p-drawer>

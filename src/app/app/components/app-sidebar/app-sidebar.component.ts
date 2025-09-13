@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, signal } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { ROUTES } from '../../routes';
 
@@ -14,6 +14,7 @@ type MenuSection = { name: string; children: MenuItem[]; };
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppSidebarComponent {
+  isMobile = input(false);
   menu = signal<MenuSection[]>([
     {
       name: 'MAIN',

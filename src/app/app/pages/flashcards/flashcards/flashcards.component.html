@@ -2,7 +2,8 @@
     <div>
         <p-iconfield>
             <p-inputicon class="ph ph-magnifying-glass" />
-            <input type="text" pInputText placeholder="Search" [formControl]="searchControl" debounce="300" />
+            <input class="max-w-32 lg:max-w-full" type="text" pInputText placeholder="Search"
+                [formControl]="searchControl" />
         </p-iconfield>
     </div>
     <div class="flex gap-2">
@@ -26,7 +27,11 @@
     <div class="bg-slate-700 p-3 rounded-lg mb-3">
         <div class="flex justify-between">
             <div class="flex gap-2">
-                <p-tag severity="info" pTooltip="Difficulty" tooltipPosition="top">
+                <p-tag [severity]="
+                    (flashcard.grade === 'VeryHard' || flashcard.grade === 'Hard') ? 'danger' 
+                    : (flashcard.grade === 'VeryEasy' || flashcard.grade === 'Easy') ? 'success' 
+                    : 'warning'"
+                    pTooltip="Difficulty" tooltipPosition="top">
                     <i class="ph ph-gauge"></i>
                     @switch(flashcard.grade) {
                     @case ("VeryHard") {

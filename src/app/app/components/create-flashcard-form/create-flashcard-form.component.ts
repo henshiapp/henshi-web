@@ -9,6 +9,7 @@ import { FlashcardsService } from '../../services/flashcards.service';
 import { Flashcard } from '../../../core/types/Flashcard';
 import { QuillEditorComponent } from 'ngx-quill'
 import { finalize } from 'rxjs';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-create-flashcard-form',
@@ -27,6 +28,7 @@ export class CreateFlashcardFormComponent {
   private fb = inject(FormBuilder);
   private service = inject(FlashcardsService);
   private toast = inject(MessageService);
+  protected breakpointObserver = inject(BreakpointObserver)
 
   loading = signal(false)
 
@@ -34,6 +36,8 @@ export class CreateFlashcardFormComponent {
     question: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(3000)]],
     answer: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(3000)]],
   });
+
+  Breakpoints = Breakpoints;
 
   onSubmit() {
     if (this.form.invalid) return;

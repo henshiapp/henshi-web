@@ -1,6 +1,7 @@
-<div class="bg-slate-950 px-2 min-h-screen flex relative lg:static">
-    <div class="h-screen block flex-shrink-0 absolute lg:static left-0 top-0 z-1 border-right-1 border-zinc-700 select-none"
-        style="width: 280px">
+<div class="lg:flex bg-slate-950 px-2 min-h-screen relative lg:static" [class.hidden]="!isMobile()"
+    [class.bg-transparent]="isMobile()">
+    <div class="h-screen block flex-shrink-0 lg:static left-0 top-0 z-1 border-right-1 border-zinc-700 select-none"
+        [class.absolule]="!isMobile()" style="width: 280px">
         <div class="flex flex-col justify-between h-full px-4">
             <div>
                 <div class="flex items-center justify-between pt-5 flex-shrink-0 pb-4 border-b-1 border-zinc-700">

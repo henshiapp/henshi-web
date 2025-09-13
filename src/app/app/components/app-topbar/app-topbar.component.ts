@@ -1,3 +1,4 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ChangeDetectionStrategy, Component, effect, inject, OnDestroy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -16,6 +17,8 @@ import { AuthenticationService } from '../../../auth/services/auth.service';
 import { PageTitleService } from '../../../core/services/page-title.service';
 import { User } from '@auth0/auth0-angular';
 import { SearchService } from '../../../core/services/search.service';
+import { Drawer } from "primeng/drawer";
+import { AppSidebarComponent } from "../app-sidebar/app-sidebar.component";
 
 @Component({
   selector: 'app-app-topbar',
@@ -28,7 +31,9 @@ import { SearchService } from '../../../core/services/search.service';
     InputTextModule,
     IconFieldModule,
     InputIconModule,
-    RippleModule
+    RippleModule,
+    Drawer,
+    AppSidebarComponent
   ],
   templateUrl: './app-topbar.component.html',
   styleUrl: './app-topbar.component.css',
@@ -37,9 +42,13 @@ import { SearchService } from '../../../core/services/search.service';
 export class AppTopbarComponent {
   private pageTitle = inject(PageTitleService);
   private auth = inject(AuthenticationService);
+  protected breakpointObserver = inject(BreakpointObserver);
+
+  Breakpoints = Breakpoints;
 
   title = signal<string>('');
   user = signal<User | null | undefined>(null);
+  isMobileSidebarOpen = signal<boolean>(this.breakpointObserver.isMatched(Breakpoints.Small));
 
   searchCtrl = new FormControl<string>('', { nonNullable: true });
   subs = new Subscription();
