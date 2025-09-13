@@ -8,8 +8,6 @@ import { AuthenticationService } from "../../auth/services/auth.service";
 
 @Injectable({ providedIn: 'root' })
 export class FlashcardsService {
-    private apiUrl = environment.api.url;
-
     flashcards = signal<Flashcard[]>([]);
     metadata = signal<PaginationMetadata | null>(null);
     loading = signal<boolean>(false);
@@ -24,7 +22,7 @@ export class FlashcardsService {
         this.loading.set(true);
         this.http
             .get<{ data: Flashcard[]; metadata: PaginationMetadata }>(
-                `${this.apiUrl}/v1/card-collections/${collectionId}/flashcards`,
+                `/v1/card-collections/${collectionId}/flashcards`,
                 {
                     params: {
                         ...(page ? { page: page?.toString() } : {}),
@@ -48,18 +46,18 @@ export class FlashcardsService {
     }
 
     create(collectionId: string, payload: Partial<Flashcard>) {
-        return this.http.post(`${this.apiUrl}/v1/card-collections/${collectionId}/flashcards`, payload);
+        return this.http.post(`/v1/card-collections/${collectionId}/flashcards`, payload);
     }
 
     delete(collectionId: string, id: string) {
-        return this.http.delete(`${this.apiUrl}/v1/card-collections/${collectionId}/flashcards/${id}`);
+        return this.http.delete(`/v1/card-collections/${collectionId}/flashcards/${id}`);
     }
 
     getRecall(collectionId: string) {
         this.loading.set(true);
         this.http
             .get<{ data: Flashcard[]; metadata: PaginationMetadata }>(
-                `${this.apiUrl}/v1/card-collections/${collectionId}/flashcards/recall`
+                `/v1/card-collections/${collectionId}/flashcards/recall`
             )
             .pipe(
                 tap(res => {
@@ -77,7 +75,7 @@ export class FlashcardsService {
     }
 
     finishRecall(collectionId: string, answers: { flashcardId: string; correct: boolean; }[]) {
-        return this.http.post(`${this.apiUrl}/v1/card-collections/${collectionId}/flashcards/recall`, {
+        return this.http.post(`/v1/card-collections/${collectionId}/flashcards/recall`, {
             answers
         });
     }

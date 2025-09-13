@@ -1,1 +1,7 @@
-Work in progress.
+<div class="flex gap-2">
+    <app-statistic-card title="Flashcard collections" icon="ph-stack"
+        [value]="dashboardService.flashcardCollectionCount()"
+        [loading]="dashboardService.loading()"></app-statistic-card>
+    <app-statistic-card title="Flashcards" icon="ph-cards" [value]="dashboardService.flashcardCount()"
+        [loading]="dashboardService.loading()"></app-statistic-card>
+</div>
