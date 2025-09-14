@@ -52,9 +52,14 @@
         <div class="flex justify-center mt-10">
             @if (cardIsFlipped()) {
             <div class="flex gap-2">
-                <button pButton icon="ph ph-check" label="Correct" (click)="onCorrectAnswer()"
-                    class="p-button-success"></button>
-                <button pButton icon="ph ph-x" label="Wrong" (click)="onWrongAnswer()" class="p-button-danger"></button>
+                <button pButton label="Again" pTooltip="Needs immediate review" tooltipPosition="top"
+                    (click)="onAnswer('Again')" class="p-button-danger"></button>
+                <button pButton label="Hard" pTooltip="Difficult to recall but eventually remembered"
+                    tooltipPosition="top" (click)="onAnswer('Hard')" class="p-button-warning"></button>
+                <button pButton label="Good" pTooltip="Normal recall with appropriate effort" tooltipPosition="top"
+                    (click)="onAnswer('Good')" class="p-button-info"></button>
+                <button pButton label="Easy" pTooltip="Effortless recall" tooltipPosition="top"
+                    (click)="onAnswer('Easy')" class="p-button-success"></button>
             </div>
             } @else {
             <button pButton label="Flip" (click)="flipCard()"></button>

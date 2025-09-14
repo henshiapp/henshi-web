@@ -22,6 +22,7 @@ import { IconField } from 'primeng/iconfield';
 import { TooltipModule } from 'primeng/tooltip';
 import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import dayjs from 'dayjs';
+import { getGradeLabel } from '../../../../core/types/Flashcard';
 
 @Component({
   selector: 'app-flashcards',
@@ -151,4 +152,6 @@ export class FlashcardsComponent implements OnInit {
     }
     return this.reload();
   }
+
+  getGradeLabel = getGradeLabel;
 }

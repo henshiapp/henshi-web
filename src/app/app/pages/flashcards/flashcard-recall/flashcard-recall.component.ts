@@ -10,6 +10,8 @@ import { TimerComponent } from '../../../../shared/components/timer/timer.compon
 import { FlashcardsService } from '../../../services/flashcards.service';
 import { LoadingSpinnerComponent } from "../../../../shared/components/loading-spinner/loading-spinner.component";
 import { QuillViewComponent } from "ngx-quill";
+import { Tooltip } from "primeng/tooltip";
+import { Grade } from '../../../../core/types/Flashcard';
 
 enum States {
   LOADING = 'LOADING',
@@ -35,8 +37,9 @@ enum Events {
     ConfirmDialogModule,
     TimerComponent,
     LoadingSpinnerComponent,
-    QuillViewComponent
-  ],
+    QuillViewComponent,
+    Tooltip
+],
   providers: [ConfirmationService, MessageService],
   templateUrl: './flashcard-recall.component.html',
   styleUrl: './flashcard-recall.component.css',
@@ -63,7 +66,7 @@ export class FlashcardRecallComponent implements OnInit, OnDestroy {
   currentIndex = signal(0);
   cardIsFlipped = signal(false);
   cardIsLoading = signal(false);
-  recallResults = signal<{ flashcardId: string; correct: boolean }[]>([]);
+  recallResults = signal<{ flashcardId: string; grade: Grade }[]>([]);
   hasSaved = false;
 
   counter = signal(5);
@@ -72,7 +75,7 @@ export class FlashcardRecallComponent implements OnInit, OnDestroy {
   sessionRunning = signal(false);
 
   currentFlashcard = computed(() => this.flashcards()[this.currentIndex()] ?? null);
-  score = computed(() => this.recallResults().filter(r => r.correct).length);
+  score = computed(() => this.recallResults().filter(r => r.grade === 'Good' || r.grade === 'Easy').length);
   total = computed(() => this.recallResults().length);
 
   ngOnInit(): void {
@@ -133,17 +136,10 @@ export class FlashcardRecallComponent implements OnInit, OnDestroy {
     this.cardIsFlipped.set(!this.cardIsFlipped());
   }
 
-  onCorrectAnswer() {
+  onAnswer(grade: Grade) {
     const cf = this.currentFlashcard();
     if (!cf) return;
-    this.recallResults.set([...this.recallResults(), { flashcardId: cf.id, correct: true }]);
-    this.nextCardOrFinish();
-  }
-
-  onWrongAnswer() {
-    const cf = this.currentFlashcard();
-    if (!cf) return;
-    this.recallResults.set([...this.recallResults(), { flashcardId: cf.id, correct: false }]);
+    this.recallResults.set([...this.recallResults(), { flashcardId: cf.id, grade: grade }]);
     this.nextCardOrFinish();
   }
 

@@ -1,17 +1,15 @@
-export type Grade = 'VeryEasy' | 'Easy' | 'Medium' | 'Hard' | 'VeryHard';
+export type Grade = 'Again' | 'Easy' | 'Good' | 'Hard';
 
 export const getGradeLabel = (grade: Flashcard["grade"]) => {
     switch (grade) {
-        case "VeryEasy":
-            return "Very easy";
+        case "Again":
+            return "Again";
         case "Easy":
             return "Easy";
-        case "Medium":
-            return "Medium";
+        case "Good":
+            return "Good";
         case "Hard":
             return "Hard";
-        case "VeryHard":
-            return "Very hard";
     }
 };
 

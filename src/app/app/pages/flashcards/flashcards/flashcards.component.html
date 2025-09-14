@@ -28,31 +28,11 @@
         <div class="flex justify-between">
             <div class="flex gap-2">
                 <p-tag [severity]="
-                    (flashcard.grade === 'VeryHard' || flashcard.grade === 'Hard') ? 'danger' 
-                    : (flashcard.grade === 'VeryEasy' || flashcard.grade === 'Easy') ? 'success' 
-                    : 'warning'"
-                    pTooltip="Difficulty" tooltipPosition="top">
+                    (flashcard.grade === 'Again' || flashcard.grade === 'Hard') ? 'danger' 
+                    : (flashcard.grade === 'Easy') ? 'success' 
+                    : 'warning'" pTooltip="Grade" tooltipPosition="top">
                     <i class="ph ph-gauge"></i>
-                    @switch(flashcard.grade) {
-                    @case ("VeryHard") {
-                    Very hard
-                    }
-                    @case ("Hard") {
-                    Hard
-                    }
-                    @case ("Medium") {
-                    Medium
-                    }
-                    @case ("Easy") {
-                    Easy
-                    }
-                    @case ("VeryEasy") {
-                    VeryEasy
-                    }
-                    @default {
-                    {{ flashcard.grade }}
-                    }
-                    }
+                    {{ getGradeLabel(flashcard.grade) }}
                 </p-tag>
                 @let recallDate = dayjs(flashcard.nextRecall);
                 @let isOverdue = recallDate < dayjs.utc(); <p-tag [severity]="isOverdue ? 'danger' : 'info'"

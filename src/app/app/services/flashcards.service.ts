@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { environment } from "../../../environments/environment";
 import { PaginationMetadata } from "../../core/types/Api";
-import { Flashcard } from "../../core/types/Flashcard";
+import { Flashcard, Grade } from "../../core/types/Flashcard";
 import { Injectable, signal } from "@angular/core";
 import { catchError, of, tap } from "rxjs";
 import { AuthenticationService } from "../../auth/services/auth.service";
@@ -74,7 +74,7 @@ export class FlashcardsService {
             .subscribe(() => this.loading.set(false));
     }
 
-    finishRecall(collectionId: string, answers: { flashcardId: string; correct: boolean; }[]) {
+    finishRecall(collectionId: string, answers: { flashcardId: string; grade: Grade; }[]) {
         return this.http.post(`/v1/card-collections/${collectionId}/flashcards/recall`, {
             answers
         });
