@@ -52,6 +52,10 @@ export const appConfig: ApplicationConfig = {
     providePrimeNG({
       theme: {
         preset: ThemePreset,
+        options: {
+          darkModeSelector: '.dark',
+          scheme: 'dark'
+        }
       },
     }),
     provideQuillConfig({
