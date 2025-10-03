@@ -1,4 +1,5 @@
-<p-drawer [style]="{width: breakpointObserver.isMatched(Breakpoints.Web) ? '50%' : '100%'}" header="Create collection" [(visible)]="visible" position="right" 
+<p-drawer [style]="{width: breakpointObserver.isMatched(Breakpoints.Web) ? '50%' : '100%'}"
+    [header]="type() === 'CREATE' ? 'Create' : 'Update' + ' collection'" [(visible)]="visible" position="right"
     (onHide)="handleClose()">
     <form [formGroup]="form" class="flex flex-col gap-2" (ngSubmit)="submit()">
         <div class="flex gap-2">
@@ -22,7 +23,9 @@
         </div>
 
         <footer class="flex justify-end gap-3 mt-5">
-            <button pButton type="submit" [loading]="loading()" [disabled]="form.invalid || loading()">Create</button>
+            <button pButton type="submit" [loading]="loading()" [disabled]="form.invalid || loading()">
+                {{ type() === 'CREATE' ? 'Create' : 'Update' }}
+            </button>
         </footer>
     </form>
 </p-drawer>

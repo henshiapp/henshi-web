@@ -1,7 +1,7 @@
 export type ApiResponse<T> = {
   status: string;
   message: string | null;
-  data: T | null;
+  data: T;
   metadata: PaginationMetadata | null;
   errors: ValidationError[] | null;
 };

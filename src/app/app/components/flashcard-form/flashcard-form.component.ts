@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, EventEmitter, inject, input, Input, model, Output, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -12,16 +12,18 @@ import { finalize } from 'rxjs';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
-  selector: 'app-create-flashcard-form',
+  selector: 'app-flashcard-form',
   imports: [CommonModule, FormsModule, ReactiveFormsModule, DrawerModule, ButtonModule, TextareaModule, QuillEditorComponent],
   providers: [MessageService],
-  templateUrl: './create-flashcard-form.component.html',
-  styleUrl: './create-flashcard-form.component.css',
+  templateUrl: './flashcard-form.component.html',
+  styleUrl: './flashcard-form.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CreateFlashcardFormComponent {
-  @Input() visible = false;
-  @Input() collectionId!: string;
+export class FlashcardFormComponent {
+  type = input.required<'CREATE' | 'UPDATE'>();
+  visible = model<boolean>(false);
+  collectionId = input.required<string>();
+  flashcardId = input<string | null>(null);
   @Output() closed = new EventEmitter<void>();
   @Output() created = new EventEmitter<void>();
 
@@ -31,6 +33,7 @@ export class CreateFlashcardFormComponent {
   protected breakpointObserver = inject(BreakpointObserver)
 
   loading = signal(false)
+  flashcard = signal<Flashcard | null>(null);
 
   form = this.fb.group({
     question: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(3000)]],
@@ -39,17 +42,66 @@ export class CreateFlashcardFormComponent {
 
   Breakpoints = Breakpoints;
 
+  constructor() {
+    effect(() => {
+      const flashcardId = this.flashcardId();
+
+      if (this.type() === 'UPDATE' && flashcardId) {
+        this.service.getById(this.collectionId(), flashcardId).subscribe({
+          next: ({ data: flashcard }) => {
+            this.flashcard.set(flashcard);
+            this.form.setValue({
+              question: flashcard.question,
+              answer: flashcard.answer
+            })
+          }
+        });
+      }
+    })
+  }
+
   onSubmit() {
     if (this.form.invalid) return;
 
+    if (this.type() === 'CREATE') {
+      this.create()
+    } else {
+      this.update()
+    }
+  }
+
+  create() {
     this.loading.set(true);
-    this.service.create(this.collectionId, this.form.value as Partial<Flashcard>)
+    this.service.create(this.collectionId(), this.form.value as Partial<Flashcard>)
       .pipe(finalize(() => {
         this.loading.set(false)
       }))
       .subscribe({
         next: () => {
           this.toast.add({ severity: 'success', summary: 'Created', detail: 'Flashcard created successfully' });
+          this.created.emit();
+          this.form.reset();
+          this.closed.emit();
+        },
+        error: (err) => {
+          this.toast.add({ severity: 'error', summary: 'Error', detail: err.message });
+        },
+      });
+  }
+
+  update() {
+    const flashcardId = this.flashcardId();
+
+    if (!flashcardId) return;
+
+    this.loading.set(true);
+    this.service.update(this.collectionId(), flashcardId, this.form.value as Partial<Flashcard>)
+      .pipe(finalize(() => {
+        this.loading.set(false)
+      }))
+      .subscribe({
+        next: () => {
+          this.toast.add({ severity: 'success', summary: 'Updated', detail: 'Flashcard updated successfully' });
           this.created.emit();
           this.form.reset();
           this.closed.emit();

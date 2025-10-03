@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { environment } from "../../../environments/environment";
-import { PaginationMetadata } from "../../core/types/Api";
+import { ApiResponse, PaginationMetadata } from "../../core/types/Api";
 import { Flashcard, Grade } from "../../core/types/Flashcard";
 import { Injectable, signal } from "@angular/core";
 import { catchError, of, tap } from "rxjs";
@@ -49,8 +49,16 @@ export class FlashcardsService {
         return this.http.post(`/v1/card-collections/${collectionId}/flashcards`, payload);
     }
 
+    update(collectionId: string, id: string, payload: Partial<Flashcard>) {
+        return this.http.patch(`/v1/card-collections/${collectionId}/flashcards/${id}`, payload);
+    }
+
     delete(collectionId: string, id: string) {
         return this.http.delete(`/v1/card-collections/${collectionId}/flashcards/${id}`);
+    }
+
+    getById(collectionId: string, id: string) {
+        return this.http.get<ApiResponse<Flashcard>>(`/v1/card-collections/${collectionId}/flashcards/${id}`);
     }
 
     getRecall(collectionId: string) {

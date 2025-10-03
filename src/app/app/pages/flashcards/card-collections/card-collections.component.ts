@@ -7,7 +7,7 @@ import { BreadcrumbService } from '../../../../core/services/breadcrumb.service'
 import { PageTitleService } from '../../../../core/services/page-title.service';
 import { CardCollectionsService } from '../../../services/card-collections.service';
 import { CardCollectionCardComponent } from '../../../components/card-collection-card/card-collection-card.component';
-import { CreateCardCollectionFormComponent } from '../../../components/create-card-collection-form/create-card-collection-form.component';
+import { CardCollectionFormComponent } from '../../../components/card-collection-form/card-collection-form.component';
 import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
 import { SearchService } from '../../../../core/services/search.service';
 import { debounceTime, firstValueFrom } from 'rxjs';
@@ -24,7 +24,7 @@ import { InputText } from 'primeng/inputtext';
     ButtonModule,
     MessageModule,
     ConfirmDialogModule,
-    CreateCardCollectionFormComponent,
+    CardCollectionFormComponent,
     CardCollectionCardComponent,
     LoadingSpinnerComponent,
     PaginatorModule,
@@ -32,7 +32,7 @@ import { InputText } from 'primeng/inputtext';
     InputText,
     IconField,
     ReactiveFormsModule
-],
+  ],
   templateUrl: './card-collections.component.html',
   styleUrl: './card-collections.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -55,6 +55,7 @@ export class CardCollectionsComponent implements OnInit {
 
   searchControl = new FormControl();
   search = signal('');
+  selectedCollectionId = signal<string | null>(null);
 
   ngOnInit() {
     this.titleService.setTitle('Card collections');
@@ -83,12 +84,17 @@ export class CardCollectionsComponent implements OnInit {
   }
 
   onPageChange(event: PaginatorState) {
-      if (event.first != null) {
+    if (event.first != null) {
       this.first.set(event.first);
     }
     if (event.page != null && event.rows != null) {
       return this.reload({ page: event.page + 1, pageSize: event.rows })
     }
     return this.reload();
+  }
+
+  onIdSelected(id: string) {
+    this.selectedCollectionId.set(id);
+    this.openDialog();
   }
 }

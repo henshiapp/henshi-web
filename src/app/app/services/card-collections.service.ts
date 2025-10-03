@@ -12,42 +12,50 @@ export class CardCollectionsService {
   loading = signal(false);
   error = signal<string | null>(null);
   metadata = signal<PaginationMetadata | null>(null);
-
+  
   constructor(private readonly http: HttpClient, private readonly auth: AuthenticationService) { }
-
+  
   fetch(search?: string, page?: number, pageSize?: number) {
     this.loading.set(true);
     this.error.set(null);
-
+    
     this.http
-      .get<ApiResponse<CardCollection[]>>(`/v1/card-collections`, {
-        params: {
-          ...(page ? { page: page.toString() } : {}),
-          ...(pageSize ? { pageSize: pageSize.toString() } : {}),
-          ...(search ? { search } : {}),
-        }
-      })
-      .pipe(
-        tap({
-          next: (res) => {
-            this.collections.set(res.data!);
-            this.metadata.set(res.metadata);
-            this.loading.set(false);
-          },
-          error: (err) => {
-            this.error.set(err.message || 'Error fetching collections');
+    .get<ApiResponse<CardCollection[]>>(`/v1/card-collections`, {
+      params: {
+        ...(page ? { page: page.toString() } : {}),
+        ...(pageSize ? { pageSize: pageSize.toString() } : {}),
+        ...(search ? { search } : {}),
+      }
+    })
+    .pipe(
+      tap({
+        next: (res) => {
+          this.collections.set(res.data!);
+          this.metadata.set(res.metadata);
+          this.loading.set(false);
+        },
+        error: (err) => {
+          this.error.set(err.message || 'Error fetching collections');
             this.loading.set(false);
           }
         })
       )
       .subscribe();
-  }
+    }
+    
+    getById(collectionId: string) {
+      return this.http.get<ApiResponse<CardCollection>>(`/v1/card-collections/${collectionId}`);
+    }
 
-  create(payload: Partial<CardCollection>) {
-    return this.http.post<CardCollection>('/v1/card-collections', payload);
-  }
+    create(payload: Partial<CardCollection>) {
+      return this.http.post<CardCollection>('/v1/card-collections', payload);
+    }
 
-  delete(id: string) {
-    return this.http.delete(`/v1/card-collections/${id}`);
+    update(collectionId: string, payload: Partial<CardCollection>) {
+      return this.http.patch<CardCollection>(`/v1/card-collections/${collectionId}`, payload);
+    }
+    
+    delete(id: string) {
+      return this.http.delete(`/v1/card-collections/${id}`);
+    }
   }
-}

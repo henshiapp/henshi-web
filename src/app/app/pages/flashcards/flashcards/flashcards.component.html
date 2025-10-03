@@ -74,9 +74,24 @@
 }
 }
 
-<app-create-flashcard-form [visible]="isCreateDialogOpen()" (closed)="isCreateDialogOpen.set(false)"
-    [collectionId]="collectionId" (created)="reload()">
-</app-create-flashcard-form>
+<app-flashcard-form 
+    type="CREATE" 
+    [visible]="isCreateDialogOpen()" 
+    (closed)="isCreateDialogOpen.set(false)"
+    [collectionId]="collectionId" 
+    (created)="reload()"
+>
+</app-flashcard-form>
+
+<app-flashcard-form 
+    type="UPDATE" 
+    [visible]="isUpdateDialogOpen()" 
+    (closed)="isUpdateDialogOpen.set(false)"
+    [collectionId]="collectionId"
+    [flashcardId]="selectedFlashcardId()" 
+    (created)="reload()"
+>
+</app-flashcard-form>
 
 <p-confirmDialog></p-confirmDialog>
 <p-menu #menu [model]="options" [popup]="true" />

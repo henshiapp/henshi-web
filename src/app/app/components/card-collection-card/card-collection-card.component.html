@@ -1,17 +1,17 @@
-<div [routerLink]="['/app/card-collections', collection.id, 'flashcards']" class="flex flex-col min-h-38 bg-slate-800 border border-slate-600
+<div [routerLink]="['/app/card-collections', collection().id, 'flashcards']" class="flex flex-col min-h-38 bg-slate-800 border border-slate-600
             hover:bg-slate-700 transition rounded-lg p-2 cursor-pointer">
     <div class="flex justify-between mt-1">
         <div class="flex items-center">
             <div class="flex items-center bg-slate-600 rounded-lg p-2 me-2">
-                <i class="ph {{ collection.icon }}"></i>
+                <i class="ph {{ collection().icon }}"></i>
             </div>
-            <span class="font-semibold text-lg">{{ collection.title }}</span>
+            <span class="font-semibold text-lg">{{ collection().title }}</span>
         </div>
         <p-button (click)="menu.toggle($event); $event.stopPropagation()" severity="secondary"
             icon="ph ph-dots-three-vertical" />
     </div>
     <span class="my-2 text-gray-400">
-        {{ collection.description || 'No description' }}
+        {{ collection().description || 'No description' }}
     </span>
 </div>
 

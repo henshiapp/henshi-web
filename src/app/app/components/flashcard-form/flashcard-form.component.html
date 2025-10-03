@@ -1,5 +1,6 @@
-<p-drawer [style]="{width: breakpointObserver.isMatched(Breakpoints.Web) ? '50%' : '100%'}" header="Create flashcard"
-  [(visible)]="visible" position="right" (onHide)="closed.emit()">
+<p-drawer [style]="{width: breakpointObserver.isMatched(Breakpoints.Web) ? '50%' : '100%'}"
+  [header]="type() === 'CREATE' ? 'Create flashcard' : 'Update flashcard'" [(visible)]="visible" position="right"
+  (onHide)="closed.emit()">
   <form [formGroup]="form" class="flex flex-col gap-2 h-full" (ngSubmit)="onSubmit()">
     <div class="flex flex-col">
       <label class="mb-2" for="question">Question *</label>
@@ -18,7 +19,7 @@
     </div>
 
     <footer class="flex justify-end gap-3 mt-15">
-      <button pButton type="submit" label="Create" [loading]="loading()"
+      <button pButton type="submit" [label]="type() === 'CREATE' ? 'Create' : 'Update'" [loading]="loading()"
         [disabled]="form.invalid || loading()"></button>
     </footer>
   </form>

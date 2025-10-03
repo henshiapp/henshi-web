@@ -7,7 +7,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TagModule } from 'primeng/tag';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
-import { CreateFlashcardFormComponent } from '../../../components/create-flashcard-form/create-flashcard-form.component';
+import { FlashcardFormComponent } from '../../../components/flashcard-form/flashcard-form.component';
 import { FlashcardsService } from '../../../services/flashcards.service';
 import { PageTitleService } from '../../../../core/services/page-title.service';
 import { BreadcrumbService } from '../../../../core/services/breadcrumb.service';
@@ -34,7 +34,7 @@ import { getGradeLabel } from '../../../../core/types/Flashcard';
     TagModule,
     ScrollPanelModule,
     LoadingSpinnerComponent,
-    CreateFlashcardFormComponent,
+    FlashcardFormComponent,
     PaginatorModule,
     MenuModule,
     QuillViewComponent,
@@ -63,6 +63,9 @@ export class FlashcardsComponent implements OnInit {
   showCreateDialog = signal(false);
   isCreateDialogOpen = signal(false);
 
+  showUpdateDialog = signal(false);
+  isUpdateDialogOpen = signal(false);
+
   page = signal(1);
   pageSize = signal(10);
   first = signal((this.page() - 1) * this.pageSize());
@@ -78,11 +81,11 @@ export class FlashcardsComponent implements OnInit {
   options: MenuItem[] = [];
 
   dayjs = dayjs;
-  
+
   ngOnInit() {
     this.title.setTitle('Flashcards');
     this.breadcrumb.set([{ label: 'Collections', path: ROUTES.cardCollections }, { label: 'Flashcards', path: window.location.pathname }]);
-    
+
     this.searchControl.valueChanges.pipe(debounceTime(500)).subscribe(search => {
       this.search.set(search);
       this.flashcardsService.load(this.collectionId, this.search(), this.page(), this.pageSize());
@@ -92,6 +95,15 @@ export class FlashcardsComponent implements OnInit {
       {
         label: 'Options',
         items: [
+          {
+            label: 'Edit',
+            icon: 'ph ph-pencil',
+            command: () => {
+              if (this.selectedFlashcardId()) {
+                this.isUpdateDialogOpen.set(true);
+              }
+            }
+          },
           {
             label: 'Remove',
             icon: 'ph ph-trash',

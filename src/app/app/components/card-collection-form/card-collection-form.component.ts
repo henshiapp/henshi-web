@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, model, Output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, EventEmitter, inject, input, Input, model, Output, signal } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -14,7 +14,7 @@ import { CardCollection } from '../../../core/types/CardCollection';
 import { Drawer } from "primeng/drawer";
 
 @Component({
-  selector: 'app-create-card-collection-form',
+  selector: 'app-card-collection-form',
   imports: [
     CommonModule,
     DialogModule,
@@ -26,14 +26,16 @@ import { Drawer } from "primeng/drawer";
     FormsModule,
     Drawer
   ],
-  templateUrl: './create-card-collection-form.component.html',
-  styleUrl: './create-card-collection-form.component.css',
+  templateUrl: './card-collection-form.component.html',
+  styleUrl: './card-collection-form.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CreateCardCollectionFormComponent {
-  @Input() visible = false;
+export class CardCollectionFormComponent {
+  type = input.required<'CREATE' | 'UPDATE'>();
+  collectionId = input<string | null>(null);
+  visible = model<boolean>(false);
   @Output() closed = new EventEmitter<boolean>();
-  @Output() created = new EventEmitter<void>();
+  @Output() submitted = new EventEmitter<void>();
 
   private fb = inject(FormBuilder);
   private service = inject(CardCollectionsService);
@@ -53,6 +55,24 @@ export class CreateCardCollectionFormComponent {
 
   Breakpoints = Breakpoints;
 
+  constructor() {
+    effect(() => {
+      const collectionId = this.collectionId();
+
+      if (this.type() === 'UPDATE' && collectionId) {
+        this.service.getById(collectionId).subscribe({
+          next: ({ data: collection }) => {
+            this.form.setValue({
+              icon: collection.icon,
+              title: collection.title,
+              description: collection.description,
+            })
+          }
+        });
+      }
+    })
+  }
+
   handleClose() {
     this.closed.emit(false);
     this.form.reset({ icon: 'ph-cards' });
@@ -60,6 +80,15 @@ export class CreateCardCollectionFormComponent {
 
   submit() {
     if (this.form.invalid) return;
+
+    if (this.type() === 'CREATE') {
+      this.create();
+    } else {
+      this.update();
+    }
+  }
+
+  create() {
     this.loading.set(true);
 
     this.service.create(this.form.value as Partial<CardCollection>).subscribe({
@@ -67,11 +96,34 @@ export class CreateCardCollectionFormComponent {
         this.toast.success('Collection created successfully');
         this.loading.set(false);
         this.closed.emit(true);
-        this.created.emit();
+        this.submitted.emit();
         this.form.reset({ icon: 'ph-cards' });
       },
       error: (err) => {
         this.toast.error('Error creating collection', err.message);
+        this.loading.set(false);
+        this.closed.emit(false);
+      }
+    });
+  }
+
+  update() {
+    const collectionId = this.collectionId();
+
+    if (!collectionId) return;
+
+    this.loading.set(true);
+
+    this.service.update(collectionId, this.form.value as Partial<CardCollection>).subscribe({
+      next: () => {
+        this.toast.success('Collection updated successfully');
+        this.loading.set(false);
+        this.closed.emit(true);
+        this.submitted.emit();
+        this.form.reset({ icon: 'ph-cards' });
+      },
+      error: (err) => {
+        this.toast.error('Error updating collection', err.message);
         this.loading.set(false);
         this.closed.emit(false);
       }

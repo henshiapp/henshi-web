@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, inject, input, Input, output, Output, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
@@ -18,8 +18,9 @@ import { HttpErrorResponse } from '@angular/common/http';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CardCollectionCardComponent {
-  @Input() collection!: CardCollection;
-  @Output() deleted = new EventEmitter<void>();
+  collection = input.required<CardCollection>();
+  deleted = output();
+  idSelected = output<string>();
 
   private service = inject(CardCollectionsService);
   private toast = inject(ToastService);
@@ -32,6 +33,11 @@ export class CardCollectionCardComponent {
       {
         label: 'Options',
         items: [
+          {
+            label: 'Edit',
+            icon: 'ph ph-pencil',
+            command: () => this.idSelected.emit(this.collection().id)
+          },
           {
             label: 'Remove',
             icon: 'ph ph-trash',
@@ -59,7 +65,7 @@ export class CardCollectionCardComponent {
           severity: 'danger',
         },
         accept: () => {
-          this.service.delete(this.collection.id).subscribe({
+          this.service.delete(this.collection().id).subscribe({
             next: () => {
               this.toast.success('Collection deleted successfully');
               this.deleted.emit();
