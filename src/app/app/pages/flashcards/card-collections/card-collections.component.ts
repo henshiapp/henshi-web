@@ -51,7 +51,8 @@ export class CardCollectionsComponent implements OnInit {
   page = signal(1);
   pageSize = signal(10);
   first = signal((this.page() - 1) * this.pageSize())
-  dialogOpen = signal(false);
+  isCreateDialogOpen = signal(false);
+  isUpdateDialogOpen = signal(false);
 
   searchControl = new FormControl();
   search = signal('');
@@ -69,12 +70,21 @@ export class CardCollectionsComponent implements OnInit {
     this.service.fetch();
   }
 
-  openDialog() {
-    this.dialogOpen.set(true);
+  openCreateDialog() {
+    this.isCreateDialogOpen.set(true);
   }
 
-  closeDialog(refresh: boolean) {
-    this.dialogOpen.set(false);
+  closeCreateDialog(refresh: boolean) {
+    this.isCreateDialogOpen.set(false);
+    if (refresh) this.reload();
+  }
+
+  openUpdateDialog() {
+    this.isUpdateDialogOpen.set(true);
+  }
+
+  closeUpdateDialog(refresh: boolean) {
+    this.isUpdateDialogOpen.set(false);
     if (refresh) this.reload();
   }
 
@@ -95,6 +105,6 @@ export class CardCollectionsComponent implements OnInit {
 
   onIdSelected(id: string) {
     this.selectedCollectionId.set(id);
-    this.openDialog();
+    this.openUpdateDialog();
   }
 }

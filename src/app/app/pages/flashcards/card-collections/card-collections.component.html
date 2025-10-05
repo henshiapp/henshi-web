@@ -4,15 +4,14 @@
       <p-inputicon class="ph ph-magnifying-glass" />
       <input class="max-w-48 lg:max-w-full" type="text" pInputText placeholder="Search" [formControl]="searchControl" />
     </p-iconfield>
-    <button pButton size="small" icon="ph ph-plus" label="New" (click)="openDialog()"></button>
+    <button pButton size="small" icon="ph ph-plus" label="New" (click)="openCreateDialog()"></button>
   </div>
 
   @if (!loading() && !error() && collections().length) {
   <div class="flex flex-col justify-between h-full">
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-2 mb-5">
       @for (collection of collections(); track collection.id) {
-      <app-card-collection-card [collection]="collection" (deleted)="reload()"
-        (idSelected)="onIdSelected($event)" />
+      <app-card-collection-card [collection]="collection" (deleted)="reload()" (idSelected)="onIdSelected($event)" />
       }
     </div>
     <p-paginator (onPageChange)="onPageChange($event)" [first]="first()" [rows]="pageSize()"
@@ -44,10 +43,10 @@
   }
 </section>
 
-<app-card-collection-form type="CREATE" [visible]="dialogOpen()" (closed)="closeDialog($event)"
+<app-card-collection-form type="CREATE" [visible]="isCreateDialogOpen()" (closed)="closeCreateDialog($event)"
   (submitted)="reload()" />
 
-<app-card-collection-form type="UPDATE" [collectionId]="selectedCollectionId()" [visible]="dialogOpen()"
-  (closed)="closeDialog($event)" (submitted)="reload()" />
+<app-card-collection-form type="UPDATE" [collectionId]="selectedCollectionId()" [visible]="isUpdateDialogOpen()"
+  (closed)="closeUpdateDialog($event)" (submitted)="reload()" />
 
 <p-confirmDialog></p-confirmDialog>
